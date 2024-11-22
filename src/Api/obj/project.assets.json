@@ -3010,8 +3010,8 @@
     },
     "Infrastructure/1.0.0": {
       "type": "project",
-      "path": "../../Infrastructure/Infrastructure.csproj",
-      "msbuildProject": "../../Infrastructure/Infrastructure.csproj"
+      "path": "../Infrastructure/Infrastructure.csproj",
+      "msbuildProject": "../Infrastructure/Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3051,11 +3051,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\Infrastructure\\Infrastructure.csproj"
-            },
             "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj": {
               "projectPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj"
+            },
+            "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }

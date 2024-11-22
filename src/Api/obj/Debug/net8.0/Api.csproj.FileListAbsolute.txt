@@ -123,3 +123,4 @@ D:\dev\projects\dotnet_projects\AdminPanel\src\Api\bin\Debug\net8.0\System.Ident
 D:\dev\projects\dotnet_projects\AdminPanel\src\Api\bin\Debug\net8.0\AutoMapper.dll
 D:\dev\projects\dotnet_projects\AdminPanel\src\Api\bin\Debug\net8.0\Infrastructure.dll
 D:\dev\projects\dotnet_projects\AdminPanel\src\Api\bin\Debug\net8.0\Infrastructure.pdb
+D:\dev\projects\dotnet_projects\AdminPanel\src\Api\obj\Debug\net8.0\Api.sourcelink.json
