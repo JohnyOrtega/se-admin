@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy the solution and project files
-COPY src/*.sln ./
+COPY *.sln ./
 COPY src/Core/*.csproj ./Core/
 COPY src/Infrastructure/*.csproj ./Infrastructure/
 COPY src/Api/*.csproj ./Api/
