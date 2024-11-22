@@ -20,7 +20,10 @@ public static class ServiceCollection
     
     private static IServiceCollection ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
+                               configuration.GetConnectionString("DefaultConnection");
+        
+        Console.WriteLine(connectionString);
         
         services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))

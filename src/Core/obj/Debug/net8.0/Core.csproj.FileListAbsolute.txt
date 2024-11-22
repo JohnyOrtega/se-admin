@@ -12,3 +12,4 @@ D:\dev\projects\dotnet_projects\AdminPanel\src\Core\obj\Debug\net8.0\Core.pdb
 D:\dev\projects\dotnet_projects\AdminPanel\src\Core\obj\Debug\net8.0\ref\Core.dll
 D:\dev\projects\dotnet_projects\AdminPanel\src\Core\bin\Debug\net8.0\Core.runtimeconfig.json
 D:\dev\projects\dotnet_projects\AdminPanel\src\Core\obj\Debug\net8.0\Core.genruntimeconfig.cache
+D:\dev\projects\dotnet_projects\AdminPanel\src\Core\obj\Debug\net8.0\Core.sourcelink.json

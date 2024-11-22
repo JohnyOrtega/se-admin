@@ -34,7 +34,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DATABASE_URL": "server=autorack.proxy.rlwy.net;port=37870;database=railway;user=root;password=rvyUiKhpuTHEgjNYIFpaeLDKkjSXrguz"
       }
     }
   }
