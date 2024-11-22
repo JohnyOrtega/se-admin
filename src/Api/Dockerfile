@@ -1,23 +1,33 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
+﻿# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["src/Api/Api.csproj", "src/Api/"]
-RUN dotnet restore "src/Api/Api.csproj"
-COPY . .
-WORKDIR "/src/src/Api"
-RUN dotnet build "Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+# Set the working directory inside the container
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+# Copy the solution and project files
+COPY src/*.sln ./
+COPY src/Core/*.csproj ./Core/
+COPY src/Infrastructure/*.csproj ./Infrastructure/
+COPY src/Api/*.csproj ./Api/
+
+# Restore the dependencies for all projects
+RUN dotnet restore
+
+# Copy the entire source code
+COPY src/ ./ 
+
+# Build the Web API project in Release mode
+WORKDIR /app/Api
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: Run
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+# Set the working directory for the runtime container
+WORKDIR /app
+
+# Copy the published application from the build container
+COPY --from=build /app/publish .
+
+# Set the entry point to start the Web API
 ENTRYPOINT ["dotnet", "Api.dll"]
