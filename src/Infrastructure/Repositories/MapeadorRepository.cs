@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class MotoboyRepository(AppDbContext context) : Repository<Motoboy>(context), IMotoboyRepository
+public class MapeadorRepository(AppDbContext context) : Repository<Mapeador>(context), IMapeadorRepository
 {
     private readonly AppDbContext _context = context;
-    public IQueryable<Motoboy> GetWithFilters(MotoboyFilterParams filters)
+    public IQueryable<Mapeador> GetWithFilters(MapeadorFilterParams filters)
     {
-        var query = _context.Motoboys.AsQueryable();
+        var query = _context.Mapeadores.AsQueryable();
         
         if (!string.IsNullOrEmpty(filters.Name))
             query = query.Where(m => m.Name.Contains(filters.Name));

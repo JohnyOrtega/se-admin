@@ -1,8 +1,7 @@
-namespace Core.Dtos;
+namespace Core.Models;
 
-public class MotoboyDto
+public class Mapeador : Entity
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public string Telephone { get; set; }
     public string City { get; set; }

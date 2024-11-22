@@ -6,5 +6,5 @@ namespace Infrastructure.Context;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users => Set<User>();
-    public DbSet<Motoboy> Motoboys => Set<Motoboy>();
+    public DbSet<Mapeador> Mapeadores => Set<Mapeador>();
 }

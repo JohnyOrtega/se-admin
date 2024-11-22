@@ -9,7 +9,7 @@ public static class ServiceCollection
     public static IServiceCollection AddCore(this IServiceCollection services)
     {
         services
-            .AddScoped<IMotoboyService, MotoboyService>()
+            .AddScoped<IMapeadorService, MapeadorService>()
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<ITokenService, TokenService>();
         

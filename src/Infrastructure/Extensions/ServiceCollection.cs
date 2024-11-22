@@ -35,7 +35,7 @@ public static class ServiceCollection
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services
-            .AddScoped<IMotoboyRepository, MotoboyRepository>()
+            .AddScoped<IMapeadorRepository, MapeadorRepository>()
             .AddScoped<IAuthRepository, AuthRepository>();
         
         return services;

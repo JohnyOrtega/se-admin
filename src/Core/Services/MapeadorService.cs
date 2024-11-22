@@ -9,29 +9,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services;
 
-public class MotoboyService(IMotoboyRepository motoboyRepository, IMapper mapper) : IMotoboyService
+public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper mapper) : IMapeadorService
 {
-    private readonly IMotoboyRepository _motoboyRepository = motoboyRepository;
+    private readonly IMapeadorRepository _mapeadorRepository = mapeadorRepository;
     
-    public async Task<string> Create(Motoboy motoboy)
+    public async Task<string> Create(Mapeador mapeador)
     { 
-        var existsMotoboy = await _motoboyRepository.ExistsAsync(motoboy.Id);
+        var existsMotoboy = await _mapeadorRepository.ExistsAsync(mapeador.Id);
         if (existsMotoboy)
         {
             return "Motoboy is already exists";
         }
 
-        await _motoboyRepository.AddAsync(motoboy);
+        await _mapeadorRepository.AddAsync(mapeador);
         
-        return motoboy.Id.ToString();
+        return mapeador.Id.ToString();
     }
 
-    public async Task<PagedResponse<Motoboy>> GetWithFilters(MotoboyFilterParams filters)
+    public async Task<PagedResponse<Mapeador>> GetWithFilters(MapeadorFilterParams filters)
     {
         var pageNumber = filters.PageNumber;
         var pageSize = filters.PageSize;
         
-        var query = _motoboyRepository.GetWithFilters(filters);
+        var query = _mapeadorRepository.GetWithFilters(filters);
         
         var totalItems = await query.CountAsync();
         var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
@@ -41,7 +41,7 @@ public class MotoboyService(IMotoboyRepository motoboyRepository, IMapper mapper
             .Take(pageSize)
             .ToListAsync();
         
-        return new PagedResponse<Motoboy>()
+        return new PagedResponse<Mapeador>()
         {
             Items = items,
             PageNumber = pageNumber,
@@ -53,25 +53,25 @@ public class MotoboyService(IMotoboyRepository motoboyRepository, IMapper mapper
 
     public async Task DeleteAsync(Guid id)
     {
-        var existsMotoboy = await _motoboyRepository.ExistsAsync(id);
+        var existsMotoboy = await _mapeadorRepository.ExistsAsync(id);
         if (!existsMotoboy)
         {
             throw new Exception("Motoboy is not found.");
         }
 
-        await _motoboyRepository.DeleteAsync(id);
+        await _mapeadorRepository.DeleteAsync(id);
     }
 
-    public async Task UpdateAsync(MotoboyDto motoboyDto)
+    public async Task UpdateAsync(MapeadorDto mapeadorDto)
     {
-        var motoboy = await _motoboyRepository.GetByIdAsync(motoboyDto.Id);
+        var motoboy = await _mapeadorRepository.GetByIdAsync(mapeadorDto.Id);
         if (motoboy == null)
         {
             throw new Exception("Motoboy is not found.");
         }
         
-        mapper.Map(motoboyDto, motoboy);
+        mapper.Map(mapeadorDto, motoboy);
         
-        await _motoboyRepository.UpdateAsync(motoboy);
+        await _mapeadorRepository.UpdateAsync(motoboy);
     }
 }
