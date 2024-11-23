@@ -1,5 +1,6 @@
 using Core.Repositories.Interfaces;
 using Infrastructure.Context;
+using Infrastructure.Interceptors;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,8 @@ public static class ServiceCollection
     {
         services
             .ConfigureDatabase(configuration)
-            .AddRepositories();
+            .AddRepositories()
+            .AddInterceptors();
         
         return services;
     }
@@ -37,6 +39,14 @@ public static class ServiceCollection
         services
             .AddScoped<IMapeadorRepository, MapeadorRepository>()
             .AddScoped<IAuthRepository, AuthRepository>();
+        
+        return services;
+    }
+    
+    private static IServiceCollection AddInterceptors(this IServiceCollection services)
+    {
+        services
+            .AddScoped<AuditableInterceptor>();
         
         return services;
     }
