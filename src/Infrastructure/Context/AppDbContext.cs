@@ -10,7 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
     
     public DbSet<User> Users => Set<User>();
     public DbSet<Mapeador> Mapeadores => Set<Mapeador>();
-
+    public DbSet<Proprietario> Proprietarios => Set<Proprietario>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.AddInterceptors(_auditableInterceptor);

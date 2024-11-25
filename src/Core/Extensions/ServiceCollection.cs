@@ -11,7 +11,8 @@ public static class ServiceCollection
         services
             .AddScoped<IMapeadorService, MapeadorService>()
             .AddScoped<IAuthService, AuthService>()
-            .AddScoped<ITokenService, TokenService>();
+            .AddScoped<ITokenService, TokenService>()
+            .AddScoped<IProprietarioService, ProprietarioService>();
         
         return services;
     }
