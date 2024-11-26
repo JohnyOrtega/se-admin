@@ -38,7 +38,7 @@ public static class ServiceCollection
     {
         services
             .AddScoped<IMapeadorRepository, MapeadorRepository>()
-            .AddScoped<IAuthRepository, AuthRepository>()
+            .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IProprietarioRepository, ProprietarioRepository>();
         
         return services;
