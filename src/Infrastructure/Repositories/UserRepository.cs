@@ -1,14 +1,15 @@
 using Core.Models;
+using Core.Models.Interfaces;
 using Core.Repositories.Interfaces;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository(AppDbContext context) : Repository<User>(context), IUserRepository
+public class UserRepository(AppDbContext context, ITokenConfiguration tokenConfiguration) : Repository<User>(context), IUserRepository
 {
     private readonly AppDbContext _context = context;
-
+    private readonly ITokenConfiguration _tokenConfiguration = tokenConfiguration;
     public async Task<bool> ExistsByEmailAsync(string email)
     {
         return await _context.Users.FirstOrDefaultAsync(x => x.Email == email) != null;
@@ -19,17 +20,12 @@ public class UserRepository(AppDbContext context) : Repository<User>(context), I
         return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
-    public async Task SaveRefreshTokenAsync(Guid userId, string refreshToken)
+    public async Task SaveRefreshTokenAsync(User user, string refreshToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == userId);
-        
-        if (user == null)
-        {
-            throw new ArgumentException("User not found", nameof(userId));
-        }
-        
         user.RefreshToken = refreshToken;
+
+        var refreshTokenExp = _tokenConfiguration.ExpirationInHours * 2;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddHours(refreshTokenExp);
         
         _context.Users.Update(user);
         await _context.SaveChangesAsync();

@@ -18,7 +18,7 @@ public class TokenService(ITokenConfiguration tokenConfiguration, IConfiguration
     public (string, DateTime) GenerateToken(IUserToken user)
     {
         var secretKey = _configuration["Jwt:SecretKey"] 
-                        ?? throw new InvalidOperationException("Secret key não configurada");
+                        ?? throw new InvalidOperationException("Secret Key is missing.");
         
         var key = Encoding.ASCII.GetBytes(secretKey);
         

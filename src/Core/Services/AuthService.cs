@@ -42,7 +42,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
         var (token, tokenExpiration) = _tokenService.GenerateToken(userToken);
         var refreshToken = _tokenService.GenerateRefreshToken();
         
-        await _userRepository.SaveRefreshTokenAsync(user.Id, refreshToken);
+        await _userRepository.SaveRefreshTokenAsync(user, refreshToken);
         
         return new LoginResponseDto(
             Token: token,
@@ -101,7 +101,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
         if (user == null) 
             return null;
         
-        if (user.RefreshToken != refreshToken) 
+        if (user.RefreshToken != refreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow) 
             return null;
         
         var userToken = new UserToken
@@ -115,7 +115,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
         var (newToken, newTokenExpiration) = _tokenService.GenerateToken(userToken);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
         
-        await _userRepository.SaveRefreshTokenAsync(user.Id, newRefreshToken);
+        await _userRepository.SaveRefreshTokenAsync(user, newRefreshToken);
         
         return new LoginResponseDto(
             Token: newToken,
