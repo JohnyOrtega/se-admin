@@ -15,7 +15,7 @@ public class TokenService(ITokenConfiguration tokenConfiguration, IConfiguration
     private readonly ITokenConfiguration _tokenConfiguration = tokenConfiguration;
     private readonly IConfiguration _configuration = configuration;
     
-    public string GenerateToken(IUserToken user)
+    public (string, DateTime) GenerateToken(IUserToken user)
     {
         var secretKey = _configuration["Jwt:SecretKey"] 
                         ?? throw new InvalidOperationException("Secret key não configurada");
@@ -36,7 +36,7 @@ public class TokenService(ITokenConfiguration tokenConfiguration, IConfiguration
         
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        return (tokenHandler.WriteToken(token), token.ValidTo);
     }
 
     private static ClaimsIdentity GenerateClaims(IUserToken user)

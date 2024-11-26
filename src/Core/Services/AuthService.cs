@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Core.Dtos;
 using Core.Dtos.Login;
 using Core.Dtos.Register;
 using Core.Models;
@@ -40,7 +39,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
             Role = user.Role
         };
         
-        var token = _tokenService.GenerateToken(userToken);
+        var (token, tokenExpiration) = _tokenService.GenerateToken(userToken);
         var refreshToken = _tokenService.GenerateRefreshToken();
         
         await _userRepository.SaveRefreshTokenAsync(user.Id, refreshToken);
@@ -48,7 +47,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
         return new LoginResponseDto(
             Token: token,
             RefreshToken: refreshToken,
-            TokenExpiration: DateTime.UtcNow.AddHours(2)
+            TokenExpiration: tokenExpiration
         );
     }
     
@@ -113,7 +112,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
             Role = user.Role
         };
         
-        var newToken = _tokenService.GenerateToken(userToken);
+        var (newToken, newTokenExpiration) = _tokenService.GenerateToken(userToken);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
         
         await _userRepository.SaveRefreshTokenAsync(user.Id, newRefreshToken);
@@ -121,7 +120,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
         return new LoginResponseDto(
             Token: newToken,
             RefreshToken: newRefreshToken,
-            TokenExpiration: DateTime.UtcNow.AddHours(2)
+            TokenExpiration: newTokenExpiration
         );
     }
 }
