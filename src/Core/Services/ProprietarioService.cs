@@ -12,7 +12,7 @@ namespace Core.Services;
 public class ProprietarioService(IProprietarioRepository proprietarioRepository, IMapper mapper) : IProprietarioService
 {
     private readonly IProprietarioRepository _proprietarioRepository = proprietarioRepository;
-    
+    private readonly IMapper _mapper = mapper;
     public async Task<string> Create(Proprietario proprietario)
     { 
         var existsProprietario = await _proprietarioRepository.ExistsAsync(proprietario.Id);
@@ -62,16 +62,16 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         await _proprietarioRepository.DeleteAsync(id);
     }
 
-    public async Task UpdateAsync(ProprietarioDto proprietarioDto)
+    public async Task<Proprietario> UpdateAsync(ProprietarioDto proprietarioDto)
     {
         var proprietario = await _proprietarioRepository.GetByIdAsync(proprietarioDto.Id);
         if (proprietario == null)
         {
-            throw new Exception("Motoboy is not found.");
+            throw new Exception("Cemiterio is not found.");
         }
         
-        mapper.Map(proprietarioDto, proprietario);
+        _mapper.Map(proprietarioDto, proprietario);
         
-        await _proprietarioRepository.UpdateAsync(proprietario);
+        return await _proprietarioRepository.UpdateAsync(proprietario);
     }
 }

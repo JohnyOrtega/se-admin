@@ -42,10 +42,11 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
         await context.SaveChangesAsync();
     }
 
-    public virtual async Task UpdateAsync(TEntity entity)
+    public virtual async Task<TEntity> UpdateAsync(TEntity entity)
     {
-        _dbSet.Update(entity);
+        var entityUpdated = _dbSet.Update(entity);
         await context.SaveChangesAsync();
+        return entityUpdated.Entity;
     }
 
     public virtual async Task DeleteAsync(Guid id)

@@ -61,7 +61,21 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
 app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
+app.Use(async (context, next) =>
+{
+    var token = context.Request.Headers.Authorization;
+    Console.WriteLine($"Token recebido: {token}");
+    await next();
+});
+app.UseAuthentication();
+app.UseAuthorization();
+app.Use(async (context, next) =>
+{
+    var token = context.Request.Headers.Authorization;
+    Console.WriteLine($"Token recebido: {token}");
+    await next();
+});
+app.MapControllers();
 app.Run();

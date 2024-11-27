@@ -41,8 +41,8 @@ public class ProprietarioController(IProprietarioService proprietarioService, IM
             return BadRequest("Ids do not match.");
         }
         
-        await _proprietarioService.UpdateAsync(proprietarioDto);
-        return NoContent();
+        var proprietarioUpdated = await _proprietarioService.UpdateAsync(proprietarioDto);
+        return Ok(proprietarioUpdated);
     }
     
     [HttpDelete("{id:guid}")]
