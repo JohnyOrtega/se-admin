@@ -10,7 +10,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CemiterioController(ICemiterioService cemiterioService, IMapper mapper) : ControllerBase
+public class ImovelController(ICemiterioService cemiterioService, IMapper mapper) : ControllerBase
 {
     private readonly ICemiterioService _cemiterioService = cemiterioService;
     private readonly IMapper _mapper = mapper;

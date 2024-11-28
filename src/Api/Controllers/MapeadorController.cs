@@ -41,8 +41,8 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
             return BadRequest("Ids do not match.");
         }
         
-        await _mapeadorService.UpdateAsync(mapeadorDto);
-        return NoContent();
+        var mapeadorUpdated = await _mapeadorService.UpdateAsync(mapeadorDto);
+        return Ok(mapeadorUpdated);
     }
     
     [HttpDelete("{id:guid}")]

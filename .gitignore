@@ -71,3 +71,6 @@ _ReSharper*/
 *.sln.iml
 
 **/Properties/launchSettings.json
+src/Api/appsettings.Development.json
+src/Api/appsettings.json
+src/Api/Properties/launchSettings.json

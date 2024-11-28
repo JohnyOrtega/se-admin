@@ -10,5 +10,5 @@ public interface IMapeadorService
     Task<string> Create(Mapeador mapeadorDto);
     Task<PagedResponse<Mapeador>> GetWithFilters(MapeadorFilterParams filters);
     Task DeleteAsync(Guid id);
-    Task UpdateAsync(MapeadorDto mapeador);
+    Task<Mapeador> UpdateAsync(MapeadorDto mapeador);
 }

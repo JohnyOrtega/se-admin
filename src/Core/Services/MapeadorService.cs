@@ -15,10 +15,10 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
     
     public async Task<string> Create(Mapeador mapeador)
     { 
-        var existsMotoboy = await _mapeadorRepository.ExistsAsync(mapeador.Id);
-        if (existsMotoboy)
+        var existsMapeador = await _mapeadorRepository.ExistsAsync(mapeador.Id);
+        if (existsMapeador)
         {
-            return "Motoboy is already exists";
+            return "Mapeador is already exists";
         }
 
         await _mapeadorRepository.AddAsync(mapeador);
@@ -53,25 +53,26 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
 
     public async Task DeleteAsync(Guid id)
     {
-        var existsMotoboy = await _mapeadorRepository.ExistsAsync(id);
-        if (!existsMotoboy)
+        var existsMapeador = await _mapeadorRepository.ExistsAsync(id);
+        if (!existsMapeador)
         {
-            throw new Exception("Motoboy is not found.");
+            throw new Exception("Mapeador is not found.");
         }
 
         await _mapeadorRepository.DeleteAsync(id);
     }
 
-    public async Task UpdateAsync(MapeadorDto mapeadorDto)
+    public async Task<Mapeador> UpdateAsync(MapeadorDto mapeadorDto)
     {
-        var motoboy = await _mapeadorRepository.GetByIdAsync(mapeadorDto.Id);
-        if (motoboy == null)
+        var mapeador = await _mapeadorRepository.GetByIdAsync(mapeadorDto.Id);
+        if (mapeador == null)
         {
-            throw new Exception("Motoboy is not found.");
+            throw new Exception("Mapeador is not found.");
         }
         
-        mapper.Map(mapeadorDto, motoboy);
+        mapper.Map(mapeadorDto, mapeador);
         
-        await _mapeadorRepository.UpdateAsync(motoboy);
+        var mapeadorUpdated = await _mapeadorRepository.UpdateAsync(mapeador);
+        return mapeadorUpdated;
     }
 }
