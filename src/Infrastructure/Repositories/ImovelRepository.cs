@@ -5,12 +5,12 @@ using Infrastructure.Context;
 
 namespace Infrastructure.Repositories;
 
-public class CemiterioRepository(AppDbContext context) : Repository<Cemiterio>(context), ICemiterioRepository
+public class ImovelRepository(AppDbContext context) : Repository<Imovel>(context), IImovelRepository
 {
     private readonly AppDbContext _context = context;
-    public IQueryable<Cemiterio> GetWithFilters(CemiterioFilterParams filters)
+    public IQueryable<Imovel> GetWithFilters(ImovelFilterParams filters)
     {
-        var query = _context.Cemiterio.AsQueryable();
+        var query = _context.Imoveis.AsQueryable();
         
         if (!string.IsNullOrEmpty(filters.Address))
             query = query.Where(c => c.Address.Contains(filters.Address));

@@ -1,6 +1,6 @@
 namespace Core.Models.Request;
 
-public class CemiterioFilterParams : PaginationParams
+public class ImovelFilterParams : PaginationParams
 {
     public string? Address { get; set; }
     public string? Neighborhood { get; set; }

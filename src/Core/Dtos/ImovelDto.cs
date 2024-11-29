@@ -1,7 +1,10 @@
-namespace Core.Models;
+using Core.Models;
 
-public class Cemiterio : Entity
+namespace Core.Dtos;
+
+public class ImovelDto
 {
+    public Guid Id { get; set; }
     public string Address { get; set; }
     public string Neighborhood { get; set; }
     public string City { get; set; }
@@ -17,5 +20,4 @@ public class Cemiterio : Entity
     public decimal TotalArea { get; set; }
     public string RealEstate { get; set; }
     public Guid ProprietarioId { get; set; }
-    public Proprietario Proprietario { get; set; }
 }

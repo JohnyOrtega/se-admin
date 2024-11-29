@@ -10,46 +10,46 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ImovelController(ICemiterioService cemiterioService, IMapper mapper) : ControllerBase
+public class ImovelController(IImovelService imovelService, IMapper mapper) : ControllerBase
 {
-    private readonly ICemiterioService _cemiterioService = cemiterioService;
+    private readonly IImovelService _imovelService = imovelService;
     private readonly IMapper _mapper = mapper;
     
     [HttpGet]
-    public async Task<ActionResult<PagedResponse<CemiterioDto>>> GetAllWithPagination(
-        [FromQuery] CemiterioFilterParams filters)
+    public async Task<ActionResult<PagedResponse<ImovelDto>>> GetAllWithPagination(
+        [FromQuery] ImovelFilterParams filters)
     {
-        var cemiterio = await _cemiterioService.GetWithFilters(filters);
+        var imovel = await _imovelService.GetWithFilters(filters);
         
-        return Ok(cemiterio);
+        return Ok(imovel);
     }
     
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] CemiterioDto cemiterioDto)
+    public async Task<ActionResult> Create([FromBody] ImovelDto imovelDto)
     {
-        var cemiterio = _mapper.Map<Cemiterio>(cemiterioDto);
+        var imovel = _mapper.Map<Imovel>(imovelDto);
         
-        var id = await _cemiterioService.Create(cemiterio);
+        var id = await _imovelService.Create(imovel);
         
-        return Created($"api/cemiterio/Create", id);
+        return Created($"api/imovel/Create", id);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult> Update([FromBody] CemiterioDto cemiterioDto, Guid id)
+    public async Task<ActionResult> Update([FromBody] ImovelDto imovelDto, Guid id)
     {
-        if (cemiterioDto.Id != id)
+        if (imovelDto.Id != id)
         {
             return BadRequest("Ids do not match.");
         }
         
-        await _cemiterioService.UpdateAsync(cemiterioDto);
+        await _imovelService.UpdateAsync(imovelDto);
         return NoContent();
     }
     
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        await _cemiterioService.DeleteAsync(id);
+        await _imovelService.DeleteAsync(id);
         return NoContent();
     }
 }

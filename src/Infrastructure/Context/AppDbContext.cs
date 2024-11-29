@@ -11,33 +11,33 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
     public DbSet<User> Users => Set<User>();
     public DbSet<Mapeador> Mapeadores => Set<Mapeador>();
     public DbSet<Proprietario> Proprietarios => Set<Proprietario>();
-    public DbSet<Cemiterio> Cemiterio => Set<Cemiterio>();
+    public DbSet<Imovel> Imoveis => Set<Imovel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Cemiterio>()
+        modelBuilder.Entity<Imovel>()
             .HasOne(c => c.Proprietario)
             .WithMany()
             .HasForeignKey(c => c.ProprietarioId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        modelBuilder.Entity<Cemiterio>()
+        modelBuilder.Entity<Imovel>()
             .Property(c => c.RentValue)
             .HasColumnType("decimal(10,2)");
 
-        modelBuilder.Entity<Cemiterio>()
+        modelBuilder.Entity<Imovel>()
             .Property(c => c.SaleValue)
             .HasColumnType("decimal(10,2)");
 
-        modelBuilder.Entity<Cemiterio>()
+        modelBuilder.Entity<Imovel>()
             .Property(c => c.IptuValue)
             .HasColumnType("decimal(10,2)");
 
-        modelBuilder.Entity<Cemiterio>()
+        modelBuilder.Entity<Imovel>()
             .Property(c => c.SearchMeterage)
             .HasColumnType("decimal(10,2)");
 
-        modelBuilder.Entity<Cemiterio>()
+        modelBuilder.Entity<Imovel>()
             .Property(c => c.TotalArea)
             .HasColumnType("decimal(10,2)");
     }
