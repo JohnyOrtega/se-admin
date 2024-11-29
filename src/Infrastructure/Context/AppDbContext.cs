@@ -12,6 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
     public DbSet<Mapeador> Mapeadores => Set<Mapeador>();
     public DbSet<Proprietario> Proprietarios => Set<Proprietario>();
     public DbSet<Imovel> Imoveis => Set<Imovel>();
+    public DbSet<Pedido> Pedidos => Set<Pedido>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

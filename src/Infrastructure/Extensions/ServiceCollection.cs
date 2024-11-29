@@ -40,7 +40,8 @@ public static class ServiceCollection
             .AddScoped<IMapeadorRepository, MapeadorRepository>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IProprietarioRepository, ProprietarioRepository>()
-            .AddScoped<IImovelRepository, ImovelRepository>();
+            .AddScoped<IImovelRepository, ImovelRepository>()
+            .AddScoped<IPedidoRepository, PedidoRepository>();
         
         return services;
     }

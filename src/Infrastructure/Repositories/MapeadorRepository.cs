@@ -8,10 +8,10 @@ namespace Infrastructure.Repositories;
 
 public class MapeadorRepository(AppDbContext context) : Repository<Mapeador>(context), IMapeadorRepository
 {
-    private readonly AppDbContext _context = context;
+    private readonly DbSet<Mapeador> _mapeadores = context.Mapeadores;
     public IQueryable<Mapeador> GetWithFilters(MapeadorFilterParams filters)
     {
-        var query = _context.Mapeadores.AsQueryable();
+        var query = _mapeadores.AsQueryable();
         
         if (!string.IsNullOrEmpty(filters.Name))
             query = query.Where(m => m.Name.Contains(filters.Name));

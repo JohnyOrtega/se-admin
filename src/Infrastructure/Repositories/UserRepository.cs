@@ -8,16 +8,17 @@ namespace Infrastructure.Repositories;
 
 public class UserRepository(AppDbContext context, ITokenConfiguration tokenConfiguration) : Repository<User>(context), IUserRepository
 {
-    private readonly AppDbContext _context = context;
+    private readonly DbSet<User> _users = context.Users;
     private readonly ITokenConfiguration _tokenConfiguration = tokenConfiguration;
+    
     public async Task<bool> ExistsByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email) != null;
+        return await _users.FirstOrDefaultAsync(x => x.Email == email) != null;
     }
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+        return await _users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public async Task SaveRefreshTokenAsync(User user, string refreshToken)
@@ -27,13 +28,12 @@ public class UserRepository(AppDbContext context, ITokenConfiguration tokenConfi
         var refreshTokenExp = _tokenConfiguration.ExpirationInHours * 2;
         user.RefreshTokenExpiry = DateTime.UtcNow.AddHours(refreshTokenExp);
         
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+        await UpdateAsync(user);
     }
 
     public async Task<string?> GetRefreshTokenAsync(Guid userId)
     {
-        var user = await _context.Users
+        var user = await _users
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         return user?.RefreshToken;

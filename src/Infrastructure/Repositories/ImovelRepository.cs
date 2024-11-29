@@ -2,15 +2,16 @@ using Core.Models;
 using Core.Models.Request;
 using Core.Repositories.Interfaces;
 using Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class ImovelRepository(AppDbContext context) : Repository<Imovel>(context), IImovelRepository
 {
-    private readonly AppDbContext _context = context;
+    private readonly DbSet<Imovel> _imoveis = context.Imoveis;
     public IQueryable<Imovel> GetWithFilters(ImovelFilterParams filters)
     {
-        var query = _context.Imoveis.AsQueryable();
+        var query = _imoveis.AsQueryable();
         
         if (!string.IsNullOrEmpty(filters.Address))
             query = query.Where(c => c.Address.Contains(filters.Address));
