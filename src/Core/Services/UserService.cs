@@ -88,7 +88,6 @@ public class UserService(IUserRepository userRepository, IMapper mapper, IPasswo
             Role = userCreationDto.Role,
             Email = userCreationDto.Email,
             Name = userCreationDto.Name,
-            RefreshToken = string.Empty,
         };
         
         var passwordHashed = _passwordHasher.HashPassword(user, userCreationDto.Password);

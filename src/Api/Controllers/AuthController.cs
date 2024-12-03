@@ -1,3 +1,4 @@
+using AutoMapper;
 using Core.Dtos.Login;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,36 +7,25 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService authService) : ControllerBase
+public class AuthController(IAuthService authService, ITokenService tokenService, IMapper mapper) : ControllerBase
 {
     private readonly IAuthService _authService = authService; 
+    private readonly ITokenService _tokenService = tokenService;
+    private readonly IMapper _mapper = mapper; 
     
     [HttpPost("login")]
     [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
     {
-        var result = await _authService.AuthenticateAsync(loginRequestDto);
+        var user = await _authService.ValidateUserCredentials(loginRequestDto);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
         
-        if (result == null)
-            return Unauthorized(new { Message = "Invalid credentials." });
-
-        return Ok(result);
-    }
-
-    [HttpPost("refresh-token")]
-    [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto request)
-    {
-        var result = await _authService.RefreshTokenAsync(
-            request.Token, 
-            request.RefreshToken
-        );
+        var accessToken = _tokenService.GenerateAccessToken(user);
         
-        if (result == null)
-            return Unauthorized(new { Message = "Invalid Refresh token." });
-
-        return Ok(result);
+        return Ok(new {accessToken});
     }
 }

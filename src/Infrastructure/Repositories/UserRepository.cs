@@ -21,24 +21,6 @@ public class UserRepository(AppDbContext context, ITokenConfiguration tokenConfi
     {
         return await _users.FirstOrDefaultAsync(x => x.Email == email);
     }
-
-    public async Task SaveRefreshTokenAsync(User user, string refreshToken)
-    {
-        user.RefreshToken = refreshToken;
-
-        var refreshTokenExp = _tokenConfiguration.ExpirationInHours * 2;
-        user.RefreshTokenExpiry = DateTime.UtcNow.AddHours(refreshTokenExp);
-        
-        await UpdateAsync(user);
-    }
-
-    public async Task<string?> GetRefreshTokenAsync(Guid userId)
-    {
-        var user = await _users
-            .FirstOrDefaultAsync(u => u.Id == userId);
-
-        return user?.RefreshToken;
-    }
     
     public IQueryable<User> GetWithFilters(UserFilterParams filters)
     {

@@ -1,9 +1,10 @@
 using Core.Dtos.Login;
+using Core.Models;
 
 namespace Core.Services.Interfaces;
 
 public interface IAuthService
 {
-    Task<LoginResponseDto?> AuthenticateAsync(LoginRequestDto request);
-    Task<LoginResponseDto?> RefreshTokenAsync(string token, string refreshToken);
+    Task<User?> ValidateUserCredentials(LoginRequestDto request);
+    Task<User> GetAuthUser(Guid id);
 }

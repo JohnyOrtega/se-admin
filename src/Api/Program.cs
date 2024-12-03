@@ -1,9 +1,9 @@
 using System.Text;
+using Api.Middlewares;
 using Core.Extensions;
 using Core.Models;
 using Core.Models.Interfaces;
 using Infrastructure.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,27 +13,23 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var tokenConfiguration = new TokenConfiguration();
 builder.Configuration.GetSection("Jwt").Bind(tokenConfiguration);
-
 builder.Services.AddSingleton<ITokenConfiguration>(tokenConfiguration);
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = tokenConfiguration.Issuer,
-        ValidAudience = tokenConfiguration.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.ASCII.GetBytes(tokenConfiguration.SecretKey)),
-        ClockSkew = TimeSpan.Zero
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = tokenConfiguration.Issuer,
+            ValidAudience = tokenConfiguration.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.ASCII.GetBytes(tokenConfiguration.SecretKey)),
+        };
+    });
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpContextAccessor();
@@ -47,9 +43,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowAllOrigins", configurePolicy: policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("https://localhost:5173", "https://localhost:5174")
             .AllowAnyHeader()
-            .AllowAnyMethod(); 
+            .AllowAnyMethod();
     });
 });
 
@@ -61,21 +57,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
-app.Use(async (context, next) =>
-{
-    var token = context.Request.Headers.Authorization;
-    Console.WriteLine($"Token recebido: {token}");
-    await next();
-});
+app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-app.Use(async (context, next) =>
-{
-    var token = context.Request.Headers.Authorization;
-    Console.WriteLine($"Token recebido: {token}");
-    await next();
-});
+app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
