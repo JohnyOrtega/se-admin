@@ -1,3 +1,4 @@
+using Api.Attributes;
 using AutoMapper;
 using Core.Dtos;
 using Core.Models;
@@ -15,7 +16,7 @@ public class ProprietarioController(IProprietarioService proprietarioService, IM
     private readonly IProprietarioService _proprietarioService = proprietarioService;
     
     [HttpGet]
-    public async Task<ActionResult<PagedResponse<ProprietarioDto>>> GetAllWithPagination(
+    public async Task<ActionResult> GetAllWithPagination(
         [FromQuery] ProprietarioFilterParams filters)
     {
         var proprietarios = await _proprietarioService.GetWithFilters(filters);
@@ -24,6 +25,7 @@ public class ProprietarioController(IProprietarioService proprietarioService, IM
     }
     
     [HttpPost]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Create([FromBody] ProprietarioDto proprietarioDto)
     {
         var proprietario = mapper.Map<Proprietario>(proprietarioDto);
@@ -34,6 +36,7 @@ public class ProprietarioController(IProprietarioService proprietarioService, IM
     }
 
     [HttpPut("{id:guid}")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Update([FromBody] ProprietarioDto proprietarioDto, Guid id)
     {
         if (proprietarioDto.Id != id)
@@ -46,6 +49,7 @@ public class ProprietarioController(IProprietarioService proprietarioService, IM
     }
     
     [HttpDelete("{id:guid}")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Delete(Guid id)
     {
         await _proprietarioService.DeleteAsync(id);

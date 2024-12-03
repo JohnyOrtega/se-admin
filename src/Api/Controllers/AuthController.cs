@@ -1,7 +1,5 @@
 using Core.Dtos.Login;
-using Core.Dtos.Register;
 using Core.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -39,25 +37,5 @@ public class AuthController(IAuthService authService) : ControllerBase
             return Unauthorized(new { Message = "Invalid Refresh token." });
 
         return Ok(result);
-    }
-    
-    [HttpPost("register")]
-    [AllowAnonymous]
-    public async Task<ActionResult<RegisterResponseDto>> Register(
-        [FromBody] RegisterRequestDto request)
-    {
-        try
-        {
-            var response = await _authService.RegisterAsync(request);
-            return Ok(response);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
     }
 }

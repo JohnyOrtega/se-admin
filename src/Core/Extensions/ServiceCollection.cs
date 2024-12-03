@@ -16,7 +16,8 @@ public static class ServiceCollection
             .AddScoped<ITokenService, TokenService>()
             .AddScoped<IProprietarioService, ProprietarioService>()
             .AddScoped<IImovelService, ImovelService>()
-            .AddScoped<IPedidoService, PedidoService>();
+            .AddScoped<IPedidoService, PedidoService>()
+            .AddScoped<IUserService, UserService>();
 
         services
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

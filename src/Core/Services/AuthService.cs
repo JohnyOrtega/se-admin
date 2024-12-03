@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Core.Dtos.Login;
-using Core.Dtos.Register;
 using Core.Models;
 using Core.Repositories.Interfaces;
 using Core.Services.Interfaces;
@@ -51,41 +50,7 @@ public class AuthService(IPasswordHasher<User> passwordHasher,
         );
     }
     
-    public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto registerRequestDto)
-    {
-        if (string.IsNullOrWhiteSpace(registerRequestDto.Email))
-            throw new ArgumentException("Email cannot be null or empty.");
-
-        if (string.IsNullOrWhiteSpace(registerRequestDto.Password))
-            throw new ArgumentException("Password cannot be null or empty.");
-        
-        if (string.IsNullOrWhiteSpace(registerRequestDto.Name))
-            throw new ArgumentException("Name cannot be null or empty.");
-        
-        if (string.IsNullOrWhiteSpace(registerRequestDto.Role))
-            throw new ArgumentException("Roles cannot be null or empty.");
-        
-        var existsUser = await _userRepository.ExistsByEmailAsync(registerRequestDto.Email);
-        if (existsUser)
-        {
-            throw new InvalidOperationException("User already exists.");
-        }
-        
-        var user = new User
-        {
-            Role = registerRequestDto.Role,
-            Email = registerRequestDto.Email,
-            Name = registerRequestDto.Name,
-            RefreshToken = string.Empty,
-        };
-        
-        var passwordHashed = _passwordHasher.HashPassword(user, registerRequestDto.Password);
-        user.PasswordHash = passwordHashed;
-        
-        await _userRepository.AddAsync(user);
-
-        return new RegisterResponseDto(user.Id, user.Email, user.Name, user.Role);
-    }
+    
     
     public async Task<LoginResponseDto?> RefreshTokenAsync(string token, string refreshToken)
     {

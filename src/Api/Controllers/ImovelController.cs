@@ -1,3 +1,4 @@
+using Api.Attributes;
 using AutoMapper;
 using Core.Dtos;
 using Core.Models;
@@ -16,7 +17,7 @@ public class ImovelController(IImovelService imovelService, IMapper mapper) : Co
     private readonly IMapper _mapper = mapper;
     
     [HttpGet]
-    public async Task<ActionResult<PagedResponse<ImovelDto>>> GetAllWithPagination(
+    public async Task<ActionResult> GetAllWithPagination(
         [FromQuery] ImovelFilterParams filters)
     {
         var imovel = await _imovelService.GetWithFilters(filters);
@@ -25,6 +26,7 @@ public class ImovelController(IImovelService imovelService, IMapper mapper) : Co
     }
     
     [HttpPost]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Create([FromBody] ImovelDto imovelDto)
     {
         var imovel = _mapper.Map<Imovel>(imovelDto);
@@ -33,8 +35,9 @@ public class ImovelController(IImovelService imovelService, IMapper mapper) : Co
         
         return Created($"api/imovel/Create", id);
     }
-
+    
     [HttpPut("{id:guid}")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Update([FromBody] ImovelDto imovelDto, Guid id)
     {
         if (imovelDto.Id != id)
@@ -47,6 +50,7 @@ public class ImovelController(IImovelService imovelService, IMapper mapper) : Co
     }
     
     [HttpDelete("{id:guid}")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Delete(Guid id)
     {
         await _imovelService.DeleteAsync(id);

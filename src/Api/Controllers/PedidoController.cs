@@ -1,3 +1,4 @@
+using Api.Attributes;
 using AutoMapper;
 using Core.Dtos;
 using Core.Models;
@@ -16,7 +17,7 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
    private readonly IMapper _mapper = mapper;
 
    [HttpGet]
-   public async Task<ActionResult<PagedResponse<PedidoDto>>> GetAllWithPagination(
+   public async Task<ActionResult> GetAllWithPagination(
       [FromQuery] PedidoFilterParams filters)
    {
       var pedido = await _pedidoService.GetWithFilters(filters);
@@ -25,6 +26,7 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
    }
     
    [HttpPost]
+   [AuthorizeRole("Admin", "Moderador")]
    public async Task<ActionResult> Create([FromBody] PedidoDto pedidoDto)
    {
       var pedido = _mapper.Map<Pedido>(pedidoDto);
@@ -35,6 +37,7 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
    }
 
    [HttpPut("{id:guid}")]
+   [AuthorizeRole("Admin", "Moderador")]
    public async Task<ActionResult> Update([FromBody] PedidoDto pedidoDto, Guid id)
    {
       if (pedidoDto.Id != id)
@@ -47,6 +50,7 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
    }
     
    [HttpDelete("{id:guid}")]
+   [AuthorizeRole("Admin", "Moderador")]
    public async Task<ActionResult> Delete(Guid id)
    {
       await _pedidoService.DeleteAsync(id);

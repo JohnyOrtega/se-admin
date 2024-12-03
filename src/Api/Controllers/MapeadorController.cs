@@ -1,3 +1,4 @@
+using Api.Attributes;
 using AutoMapper;
 using Core.Dtos;
 using Core.Models;
@@ -15,7 +16,7 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
     private readonly IMapeadorService _mapeadorService = mapeadorService;
     
     [HttpGet]
-    public async Task<ActionResult<PagedResponse<MapeadorDto>>> GetAllWithPagination(
+    public async Task<ActionResult> GetAllWithPagination(
         [FromQuery] MapeadorFilterParams filters)
     {
         var motoboys = await _mapeadorService.GetWithFilters(filters);
@@ -24,6 +25,7 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
     }
     
     [HttpPost]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Create([FromBody] MapeadorDto mapeadorDto)
     {
         var motoboy = mapper.Map<Mapeador>(mapeadorDto);
@@ -34,6 +36,7 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
     }
 
     [HttpPut("{id:guid}")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Update([FromBody] MapeadorDto mapeadorDto, Guid id)
     {
         if (mapeadorDto.Id != id)
@@ -46,6 +49,7 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
     }
     
     [HttpDelete("{id:guid}")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Delete(Guid id)
     {
         await _mapeadorService.DeleteAsync(id);
