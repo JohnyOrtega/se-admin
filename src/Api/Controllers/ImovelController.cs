@@ -25,6 +25,14 @@ public class ImovelController(IImovelService imovelService, IMapper mapper) : Co
         return Ok(imovel);
     }
     
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult> GetById(Guid id)
+    {
+        var imovel = await _imovelService.GetById(id);
+
+        return Ok(imovel);
+    }
+    
     [HttpPost]
     [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Create([FromBody] ImovelDto imovelDto)

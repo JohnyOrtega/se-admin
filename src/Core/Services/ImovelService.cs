@@ -63,6 +63,11 @@ public class ImovelService(IImovelRepository imovelRepository, IMapper mapper) :
         await _imovelRepository.DeleteAsync(id);
     }
 
+    public async Task<Imovel> GetById(Guid id)
+    {
+        return await _imovelRepository.GetByIdAsync(id);
+    }
+
     public async Task<Imovel> UpdateAsync(ImovelDto imovelDto)
     {
         var imovel = await _imovelRepository.GetByIdAsync(imovelDto.Id);

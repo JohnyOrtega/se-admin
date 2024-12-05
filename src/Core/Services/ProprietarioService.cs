@@ -74,4 +74,9 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         
         return await _proprietarioRepository.UpdateAsync(proprietario);
     }
+
+    public async Task<Proprietario> GetById(Guid id)
+    {
+        return await _proprietarioRepository.GetByIdAsync(id);
+    }
 }

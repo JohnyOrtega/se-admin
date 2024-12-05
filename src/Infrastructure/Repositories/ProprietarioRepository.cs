@@ -48,4 +48,11 @@ public class ProprietarioRepository(AppDbContext context) : Repository<Proprieta
     
         return query;
     }
+
+    public override async Task<Proprietario> GetByIdAsync(Guid id)
+    {
+        return await _proprietarios
+            .Include(p => p.Imoveis)
+            .FirstOrDefaultAsync(p => p.Id == id) ?? throw new InvalidOperationException();
+    }
 }

@@ -34,7 +34,11 @@ builder.Services.AddAuthentication()
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -58,7 +62,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAllOrigins");
-app.UseMiddleware<TokenValidationMiddleware>();
+// app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();

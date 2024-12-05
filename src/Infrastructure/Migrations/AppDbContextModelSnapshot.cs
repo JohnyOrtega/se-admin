@@ -360,12 +360,17 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Models.Imovel", b =>
                 {
                     b.HasOne("Core.Models.Proprietario", "Proprietario")
-                        .WithMany()
+                        .WithMany("Imoveis")
                         .HasForeignKey("ProprietarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Proprietario");
+                });
+
+            modelBuilder.Entity("Core.Models.Proprietario", b =>
+                {
+                    b.Navigation("Imoveis");
                 });
 #pragma warning restore 612, 618
         }

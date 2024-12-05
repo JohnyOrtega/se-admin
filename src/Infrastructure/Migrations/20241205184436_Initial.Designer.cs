@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241127153515_AddCemiterio")]
-    partial class AddCemiterio
+    [Migration("20241205184436_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Models.Cemiterio", b =>
+            modelBuilder.Entity("Core.Models.Imovel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("IptuValue")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Link")
                         .IsRequired()
@@ -72,20 +72,20 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("RentValue")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("SaleValue")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("SearchMeterage")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("TotalArea")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -101,7 +101,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProprietarioId");
 
-                    b.ToTable("Cemiterio");
+                    b.ToTable("Imoveis");
                 });
 
             modelBuilder.Entity("Core.Models.Mapeador", b =>
@@ -152,6 +152,114 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Mapeadores");
+                });
+
+            modelBuilder.Entity("Core.Models.Pedido", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<double>("BuiltArea")
+                        .HasColumnType("double");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Coordinator")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Expander")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("MappingCompleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<double>("MaximumMeterage")
+                        .HasColumnType("double");
+
+                    b.Property<double>("MinimumMeterage")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Observations")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("OnlineCreated")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("OnlineDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ParkingSpaces")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Performer")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PropertyType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PropertyValue")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("StreetView")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("StreetViewDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double>("TotalArea")
+                        .HasColumnType("double");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ZeroPoint")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pedidos");
                 });
 
             modelBuilder.Entity("Core.Models.Proprietario", b =>
@@ -237,13 +345,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("RefreshTokenExpiry")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -259,15 +360,20 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Core.Models.Cemiterio", b =>
+            modelBuilder.Entity("Core.Models.Imovel", b =>
                 {
                     b.HasOne("Core.Models.Proprietario", "Proprietario")
-                        .WithMany()
+                        .WithMany("Imoveis")
                         .HasForeignKey("ProprietarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Proprietario");
+                });
+
+            modelBuilder.Entity("Core.Models.Proprietario", b =>
+                {
+                    b.Navigation("Imoveis");
                 });
 #pragma warning restore 612, 618
         }

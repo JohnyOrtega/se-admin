@@ -23,6 +23,13 @@ public class ProprietarioController(IProprietarioService proprietarioService, IM
         
         return Ok(proprietarios);
     }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult> GetById(Guid id)
+    {
+        var proprietario = await _proprietarioService.GetById(id);
+        return Ok(proprietario);
+    }
     
     [HttpPost]
     [AuthorizeRole("Admin", "Moderador")]

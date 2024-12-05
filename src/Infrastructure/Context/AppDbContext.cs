@@ -15,10 +15,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
     public DbSet<Pedido> Pedidos => Set<Pedido>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Imovel>()
-            .HasOne(c => c.Proprietario)
-            .WithMany()
-            .HasForeignKey(c => c.ProprietarioId)
+        modelBuilder.Entity<Proprietario>()
+            .HasMany(p => p.Imoveis)
+            .WithOne(i => i.Proprietario)
+            .HasForeignKey(i => i.ProprietarioId)
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Imovel>()

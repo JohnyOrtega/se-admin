@@ -10,5 +10,6 @@ public class Proprietario : Entity
     public string City { get; set; }
     public string State { get; set; }
     public string Email { get; set; }
+    public ICollection<Imovel> Imoveis { get; set; }
     public string Observations { get; set; }
 }

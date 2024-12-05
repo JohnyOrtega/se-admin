@@ -11,4 +11,5 @@ public interface IImovelService
     Task<PagedResponse<Imovel>> GetWithFilters(ImovelFilterParams filters);
     Task<Imovel> UpdateAsync(ImovelDto imovelDto);
     Task DeleteAsync(Guid id);
+    Task<Imovel> GetById(Guid id);
 }

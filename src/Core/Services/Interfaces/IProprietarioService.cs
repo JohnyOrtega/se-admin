@@ -11,4 +11,5 @@ public interface IProprietarioService
     Task<PagedResponse<Proprietario>> GetWithFilters(ProprietarioFilterParams filters);
     Task DeleteAsync(Guid id);
     Task<Proprietario> UpdateAsync(ProprietarioDto proprietarioDto);
+    Task<Proprietario> GetById(Guid id);
 }
