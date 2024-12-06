@@ -78,4 +78,11 @@ public class ImovelRepository(AppDbContext context) : Repository<Imovel>(context
     
         return query;
     }
+
+    public override async Task<Imovel> GetByIdAsync(Guid id)
+    {
+        return await _imoveis
+            .Include(i => i.Proprietario)
+            .FirstOrDefaultAsync(i => i.Id == id) ?? throw new InvalidOperationException();
+    }
 }
