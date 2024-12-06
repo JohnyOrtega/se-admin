@@ -15,4 +15,14 @@ public class PedidoRepository(AppDbContext context) : Repository<Pedido>(context
         
         return query;
     }
+
+    public override async Task<Pedido> GetByIdAsync(Guid id)
+    {
+        var pedido = await _pedidos
+            .Include(p => p.PedidoImoveis)
+            .ThenInclude(pi => pi.Imovel)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        return pedido ?? throw new InvalidOperationException();
+    }
 }

@@ -24,6 +24,14 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
         return Ok(motoboys);
     }
     
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult> GetAllWithPagination(Guid id)
+    {
+        var mapeador = await _mapeadorService.GetById(id);
+        
+        return Ok(mapeador);
+    }
+    
     [HttpPost]
     [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> Create([FromBody] MapeadorDto mapeadorDto)

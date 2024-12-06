@@ -11,4 +11,5 @@ public interface IMapeadorService
     Task<PagedResponse<Mapeador>> GetWithFilters(MapeadorFilterParams filters);
     Task DeleteAsync(Guid id);
     Task<Mapeador> UpdateAsync(MapeadorDto mapeador);
+    Task<Mapeador> GetById(Guid id);
 }

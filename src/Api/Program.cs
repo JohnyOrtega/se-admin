@@ -62,7 +62,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAllOrigins");
-// app.UseMiddleware<TokenValidationMiddleware>();
+app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();

@@ -75,4 +75,9 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
         
         return await _pedidoRepository.UpdateAsync(pedido);
     }
+
+    public async Task<Pedido> GetById(Guid id)
+    {
+        return await _pedidoRepository.GetByIdAsync(id);
+    }
 }

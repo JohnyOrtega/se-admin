@@ -11,4 +11,5 @@ public interface IPedidoService
     Task<PagedResponse<Pedido>> GetWithFilters(PedidoFilterParams filters);
     Task DeleteAsync(Guid id);
     Task<Pedido> UpdateAsync(PedidoDto pedidoDto);
+    Task<Pedido> GetById(Guid id);
 }

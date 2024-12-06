@@ -3,7 +3,6 @@ using AutoMapper;
 using Core.Dtos;
 using Core.Models;
 using Core.Models.Request;
-using Core.Models.Response;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +23,15 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
         
       return Ok(pedido);
    }
-    
+   
+   [HttpGet("{id:guid}")]
+   public async Task<ActionResult> GetById(Guid id)
+   {
+      var pedido = await _pedidoService.GetById(id);
+        
+      return Ok(pedido);
+   }
+   
    [HttpPost]
    [AuthorizeRole("Admin", "Moderador")]
    public async Task<ActionResult> Create([FromBody] PedidoDto pedidoDto)

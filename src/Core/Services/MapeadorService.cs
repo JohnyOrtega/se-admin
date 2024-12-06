@@ -75,4 +75,9 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
         var mapeadorUpdated = await _mapeadorRepository.UpdateAsync(mapeador);
         return mapeadorUpdated;
     }
+
+    public async Task<Mapeador> GetById(Guid id)
+    {
+        return await _mapeadorRepository.GetByIdAsync(id); 
+    }
 }

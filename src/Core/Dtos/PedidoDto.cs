@@ -27,4 +27,5 @@ public class PedidoDto
     public bool OnlineCreated { get; set; }
     public DateTime OnlineDate { get; set; }
     public bool MappingCompleted { get; set; }
+    public ICollection<PedidoImovel> PedidoImoveis { get; set; }
 }
