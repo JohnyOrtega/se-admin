@@ -9,4 +9,5 @@ public interface IUserService
     Task<PagedResponse<UserResponseDto>> GetWithFilters(UserFilterParams filters);
     Task<UserResponseDto> UpdateAsync(UserDto userUpdateDto);
     Task<UserResponseDto> RegisterAsync(UserCreationDto userCreationDto);
+    Task<UserResponseDto> GetById(Guid id);
 }

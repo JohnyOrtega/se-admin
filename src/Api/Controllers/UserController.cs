@@ -23,6 +23,14 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(users);
     }
     
+    [HttpGet("{id:guid}")]
+    [AuthorizeRole("Admin")]
+    public async Task<ActionResult> GetById(Guid id)
+    {
+        var user = await _userService.GetById(id);
+        return Ok(user);
+    }
+    
     [HttpPut("{id:guid}")]
     [AuthorizeRole("Admin")]
     public async Task<ActionResult> Update([FromBody] UserDto userDto, Guid id)

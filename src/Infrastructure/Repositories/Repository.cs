@@ -9,6 +9,7 @@ namespace Infrastructure.Repositories;
 public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
     where TEntity : Entity
 {
+    private readonly AppDbContext _context = context;
     private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
     
     public virtual async Task<TEntity> GetByIdAsync(Guid id)
@@ -39,21 +40,24 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
     public virtual async Task AddAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
-        await context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity)
     {
-        var entityUpdated = _dbSet.Update(entity);
-        await context.SaveChangesAsync();
-        return entityUpdated.Entity;
+        if (_context.Entry(entity).State == EntityState.Modified)
+        {
+            await _context.SaveChangesAsync();
+        }
+        
+        return entity;
     }
 
     public virtual async Task DeleteAsync(Guid id)
     {
         var entity = await GetByIdAsync(id);
         _dbSet.Remove(entity);
-        await context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
     public virtual async Task<bool> ExistsAsync(Guid id)

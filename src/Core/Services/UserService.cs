@@ -41,14 +41,11 @@ public class UserService(IUserRepository userRepository, IMapper mapper, IPasswo
             TotalItems = totalItems
         };
     }
-
+    
+    
     public async Task<UserResponseDto> UpdateAsync(UserDto userDto)
     {
         var user = await _userRepository.GetByIdAsync(userDto.Id);
-        if (user == null)
-        {
-            throw new Exception("User is not found.");
-        }
         
         if (!string.IsNullOrEmpty(userDto.Password))
         {
@@ -59,7 +56,6 @@ public class UserService(IUserRepository userRepository, IMapper mapper, IPasswo
         _mapper.Map(userDto, user);
         
         var userUpdated = await _userRepository.UpdateAsync(user);
-        
         return _mapper.Map<UserResponseDto>(userUpdated);
     }
     
@@ -95,6 +91,12 @@ public class UserService(IUserRepository userRepository, IMapper mapper, IPasswo
         
         await _userRepository.AddAsync(user);
 
+        return _mapper.Map<UserResponseDto>(user);
+    }
+
+    public async Task<UserResponseDto> GetById(Guid id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
         return _mapper.Map<UserResponseDto>(user);
     }
 }

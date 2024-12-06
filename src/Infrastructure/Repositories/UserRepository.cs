@@ -7,24 +7,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository(AppDbContext context, ITokenConfiguration tokenConfiguration) : Repository<User>(context), IUserRepository
+public class UserRepository(AppDbContext context) : Repository<User>(context), IUserRepository
 {
-    private readonly DbSet<User> _users = context.Users;
-    private readonly ITokenConfiguration _tokenConfiguration = tokenConfiguration;
+    private readonly AppDbContext _context = context;
     
     public async Task<bool> ExistsByEmailAsync(string email)
     {
-        return await _users.FirstOrDefaultAsync(x => x.Email == email) != null;
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email) != null;
     }
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        return await _users.FirstOrDefaultAsync(x => x.Email == email);
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
     
     public IQueryable<User> GetWithFilters(UserFilterParams filters)
     {
-        var query = _users.AsQueryable();
+        var query = _context.Users.AsQueryable();
         
         if (!string.IsNullOrEmpty(filters.Name))
             query = query.Where(m => m.Name.Contains(filters.Name));
