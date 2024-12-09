@@ -1,4 +1,4 @@
-namespace Core.Dtos;
+namespace Core.Dtos.Pedido;
 
 public class PedidoDto
 {

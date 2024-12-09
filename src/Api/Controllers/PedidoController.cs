@@ -1,6 +1,6 @@
 using Api.Attributes;
 using AutoMapper;
-using Core.Dtos;
+using Core.Dtos.Pedido;
 using Core.Models;
 using Core.Models.Request;
 using Core.Services.Interfaces;
@@ -34,9 +34,9 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
    
    [HttpPost]
    [AuthorizeRole("Admin", "Moderador")]
-   public async Task<ActionResult> Create([FromBody] PedidoDto pedidoDto)
+   public async Task<ActionResult> Create([FromBody] PedidoCreateDto pedidoCreateDto)
    {
-      var pedido = _mapper.Map<Pedido>(pedidoDto);
+      var pedido = _mapper.Map<Pedido>(pedidoCreateDto);
         
       var id = await _pedidoService.Create(pedido);
         
@@ -45,14 +45,14 @@ public class PedidoController(IPedidoService pedidoService, IMapper mapper) : Co
 
    [HttpPut("{id:guid}")]
    [AuthorizeRole("Admin", "Moderador")]
-   public async Task<ActionResult> Update([FromBody] PedidoDto pedidoDto, Guid id)
+   public async Task<ActionResult> Update([FromBody] PedidoUpdateDto pedidoUpdateDto, Guid id)
    {
-      if (pedidoDto.Id != id)
+      if (pedidoUpdateDto.Id != id)
       {
          return BadRequest("Ids do not match.");
       }
         
-      await _pedidoService.UpdateAsync(pedidoDto);
+      await _pedidoService.UpdateAsync(pedidoUpdateDto);
       return NoContent();
    }
     

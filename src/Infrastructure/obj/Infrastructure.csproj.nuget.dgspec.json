@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\Infrastructure.csproj": {}
+    "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Infrastructure\\Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj": {
+    "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj",
+        "projectUniqueName": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj",
+        "projectPath": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Core\\Core.csproj",
         "packagesPath": "C:\\Users\\renan\\.nuget\\packages\\",
-        "outputPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\obj\\",
+        "outputPath": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\renan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,7 +43,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -88,21 +93,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\Infrastructure.csproj": {
+    "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\renan\\.nuget\\packages\\",
-        "outputPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Infrastructure\\obj\\",
+        "outputPath": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\renan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -116,8 +125,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj": {
-                "projectPath": "D:\\dev\\projects\\dotnet_projects\\AdminPanel\\src\\Core\\Core.csproj"
+              "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Core\\Core.csproj": {
+                "projectPath": "D:\\dev\\projects\\dotnet_projects\\superexpansao-admin-backend\\src\\Core\\Core.csproj"
               }
             }
           }
@@ -131,7 +140,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -158,7 +168,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
