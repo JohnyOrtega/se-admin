@@ -24,6 +24,13 @@ public class AbordagemController(IAbordagemService abordagemService, IMapper map
         return Ok(abordagem);
     }
 
+    [HttpGet("pendings")]
+    public async Task<ActionResult> GetAllPendings()
+    {
+        var abordagens = await _abordagemService.GetAllPendings();
+        return Ok(abordagens);
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult> GetById(Guid id)
     {

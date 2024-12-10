@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.Dtos.EmpresaDto;
+using Core.Dtos.Pedido;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -15,7 +15,7 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
     private readonly IMapper _mapper = mapper;
 
     public async Task<string> Create(Pedido pedido)
-    { 
+    {
         var existsPedido = await _pedidoRepository.ExistsAsync(pedido.Id);
         if (existsPedido)
         {
@@ -23,7 +23,7 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
         }
 
         await _pedidoRepository.AddAsync(pedido);
-        
+
         return pedido.Id.ToString();
     }
 
@@ -31,17 +31,17 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
     {
         var pageNumber = filters.PageNumber;
         var pageSize = filters.PageSize;
-        
+
         var query = _pedidoRepository.GetWithFilters(filters);
-        
+
         var totalItems = await query.CountAsync();
         var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-        
+
         var items = await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        
+
         return new PagedResponse<Pedido>()
         {
             Items = items,
@@ -63,11 +63,11 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
         await _pedidoRepository.DeleteAsync(id);
     }
 
-    public async Task<Pedido> UpdateAsync(EmpresaUpdateDto pedidoDto)
+    public async Task<Pedido> UpdateAsync(PedidoUpdateDto pedidoUpdateDto)
     {
-        var pedido = await _pedidoRepository.GetByIdAsync(pedidoDto.Id) ?? throw new Exception("Pedido is not found.");
-        _mapper.Map(pedidoDto, pedido);
-        
+        var pedido = await _pedidoRepository.GetByIdAsync(pedidoUpdateDto.Id) ?? throw new Exception("Pedido is not found.");
+        _mapper.Map(pedidoUpdateDto, pedido);
+
         return await _pedidoRepository.UpdateAsync(pedido);
     }
 

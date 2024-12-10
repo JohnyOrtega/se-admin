@@ -21,4 +21,15 @@ public class AbordagemRepository(AppDbContext context) : Repository<Abordagem>(c
         return await _abordagens
             .FirstOrDefaultAsync(c => c.Id == id) ?? throw new InvalidOperationException();
     }
+
+    public async Task<List<Abordagem>> GetAllPendings()
+    {
+        var query = _abordagens.AsQueryable()
+            .Include(a => a.Contato)
+            .Where(a => a.NextApproachDate >= DateTime.Now.AddDays(-1))
+            .OrderBy(a => a.NextApproachDate);
+
+
+        return await query.ToListAsync();
+    }
 }

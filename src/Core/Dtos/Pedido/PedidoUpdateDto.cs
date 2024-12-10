@@ -3,13 +3,13 @@ namespace Core.Dtos.Pedido;
 public class PedidoUpdateDto
 {
     public Guid Id { get; set; }
-    public string? ClientId { get; set; }
+    public string? Client { get; set; }
     public DateTime? EntryDate { get; set; }
     public DateTime? DeliveryDate { get; set; }
     public string? Performer { get; set; }
     public string? Coordinator { get; set; }
     public string? Expander { get; set; }
-    public string? OrderNumber { get; set; }
+    public string? Order { get; set; }
     public string? PropertyValue { get; set; }
     public string? ZeroPoint { get; set; }
     public string? Status { get; set; }

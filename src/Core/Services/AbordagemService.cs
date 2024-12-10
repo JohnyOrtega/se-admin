@@ -82,4 +82,9 @@ public class AbordagemService(
 
         return await _abordagemRepository.UpdateAsync(abordagem);
     }
+
+    public async Task<List<Abordagem>> GetAllPendings()
+    {
+        return await _abordagemRepository.GetAllPendings();
+    }
 }

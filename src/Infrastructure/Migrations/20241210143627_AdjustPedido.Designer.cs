@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241210143627_AdjustPedido")]
+    partial class AdjustPedido
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,12 +54,12 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("LastApproachDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("NextApproachDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("NegotiationStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("NextApproachDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
