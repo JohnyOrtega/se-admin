@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.Dtos.Pedido;
+using Core.Dtos.EmpresaDto;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -63,7 +63,7 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
         await _pedidoRepository.DeleteAsync(id);
     }
 
-    public async Task<Pedido> UpdateAsync(PedidoUpdateDto pedidoDto)
+    public async Task<Pedido> UpdateAsync(EmpresaUpdateDto pedidoDto)
     {
         var pedido = await _pedidoRepository.GetByIdAsync(pedidoDto.Id) ?? throw new Exception("Pedido is not found.");
         _mapper.Map(pedidoDto, pedido);

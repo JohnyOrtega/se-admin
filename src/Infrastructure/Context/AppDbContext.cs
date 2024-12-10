@@ -1,4 +1,3 @@
-using Core;
 using Core.Models;
 using Infrastructure.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +14,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
     public DbSet<Imovel> Imoveis => Set<Imovel>();
     public DbSet<Pedido> Pedidos => Set<Pedido>();
     public DbSet<PedidoImovel> PedidoImoveis => Set<PedidoImovel>();
+    public DbSet<Empresa> Empresas => Set<Empresa>();
+    public DbSet<Contato> Contatos => Set<Contato>();
+    public DbSet<Abordagem> Abordagens => Set<Abordagem>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Proprietario>()
@@ -58,6 +60,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
                 .HasForeignKey(e => e.ProprietarioId);
         });
         
+        modelBuilder.Entity<Contato>()
+            .HasOne(c => c.Empresa)
+            .WithMany(e => e.Contatos)
+            .HasForeignKey(c => c.EmpresaId);
+
+        modelBuilder.Entity<Abordagem>()
+            .HasOne(a => a.Contato)
+            .WithMany(c => c.Abordagens)
+            .HasForeignKey(a => a.ContatoId);
+
         base.OnModelCreating(modelBuilder);
     }
 

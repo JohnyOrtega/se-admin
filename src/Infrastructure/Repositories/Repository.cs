@@ -1,5 +1,4 @@
 using Core.Models;
-using Core.Models.Response;
 using Core.Repositories.Interfaces;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
 {
     private readonly AppDbContext _context = context;
     private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
-    
+
     public virtual async Task<TEntity> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id) ?? throw new InvalidOperationException();
@@ -21,14 +20,14 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
     {
         return await _dbSet.AsNoTracking().ToListAsync();
     }
-    
+
     public virtual IQueryable<TEntity> GetQueryWithPagination(int pageNumber, int pageSize)
     {
         var query = _dbSet.AsNoTracking()
             .OrderBy(x => x.Id)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize);
-        
+
         return query;
     }
 
@@ -36,7 +35,7 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
     {
         return await _dbSet.AsNoTracking().CountAsync();
     }
-    
+
     public virtual async Task AddAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
@@ -49,7 +48,7 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
         {
             await _context.SaveChangesAsync();
         }
-        
+
         return entity;
     }
 

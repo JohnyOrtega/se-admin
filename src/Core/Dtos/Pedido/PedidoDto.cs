@@ -1,3 +1,5 @@
+using Core.Models;
+
 namespace Core.Dtos.Pedido;
 
 public class PedidoDto
