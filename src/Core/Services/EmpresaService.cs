@@ -16,17 +16,17 @@ public class EmpresaService(
     private readonly IMapper _mapper = mapper;   
     private readonly IEmpresaRepository _empresaRepository = empresaRepository;
 
-    public async Task<string> Create(Empresa empresa)
+    public async Task<Empresa> Create(Empresa empresa)
     {
         var existsEmpresa = await _empresaRepository.ExistsAsync(empresa.Id);
         if (existsEmpresa)
         {
-            return "Empresa is already exists";
+            throw new Exception("Empresa already exists");
         }
 
-        await _empresaRepository.AddAsync(empresa);
+        var empresaCreated = await _empresaRepository.AddAsync(empresa);
 
-        return empresa.Id.ToString();
+        return empresaCreated;
     }
 
     public async Task<PagedResponse<Empresa>> GetWithFilters(EmpresaFilterParams filters)

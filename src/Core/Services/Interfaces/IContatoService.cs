@@ -7,7 +7,7 @@ namespace Core.Services.Interfaces;
 
 public interface IContatoService
 {
-    Task<string> Create(Contato contato);
+    Task<Contato> Create(Contato contato);
     Task<PagedResponse<Contato>> GetWithFilters(ContatoFilterParams filters);
     Task<Contato> GetById(Guid id);
     Task<Contato> UpdateAsync(ContatoUpdateDto contatoUpdateDto);

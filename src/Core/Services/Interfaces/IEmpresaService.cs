@@ -7,7 +7,7 @@ namespace Core.Services.Interfaces;
 
 public interface IEmpresaService
 {
-    Task<string> Create(Empresa empresa);
+    Task<Empresa> Create(Empresa empresa);
     Task<PagedResponse<Empresa>> GetWithFilters(EmpresaFilterParams filters);
     Task<Empresa> GetById(Guid id);
     Task<Empresa> UpdateAsync(EmpresaUpdateDto empresaUpdateDto);

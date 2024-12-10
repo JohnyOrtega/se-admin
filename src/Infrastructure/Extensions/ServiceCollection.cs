@@ -43,7 +43,8 @@ public static class ServiceCollection
             .AddScoped<IImovelRepository, ImovelRepository>()
             .AddScoped<IPedidoRepository, PedidoRepository>()
             .AddScoped<IEmpresaRepository, EmpresaRepository>()
-            .AddScoped<IContatoRepository, ContatoRepository>();
+            .AddScoped<IContatoRepository, ContatoRepository>()
+            .AddScoped<IAbordagemRepository, AbordagemRepository>();
         
         return services;
     }

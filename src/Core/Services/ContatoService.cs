@@ -16,17 +16,17 @@ public class ContatoService(
     private readonly IMapper _mapper = mapper;   
     private readonly IContatoRepository _contatoRepository = contatoRepository;
 
-    public async Task<string> Create(Contato contato)
+    public async Task<Contato> Create(Contato contato)
     {
         var existsContato = await _contatoRepository.ExistsAsync(contato.Id);
         if (existsContato)
         {
-            return "Contato is already exists";
+            throw new Exception("Contato already exists");
         }
 
-        await _contatoRepository.AddAsync(contato);
+        var contatoCreated = await _contatoRepository.AddAsync(contato);
 
-        return contato.Id.ToString();
+        return contatoCreated;
     }
 
     public async Task<PagedResponse<Contato>> GetWithFilters(ContatoFilterParams filters)

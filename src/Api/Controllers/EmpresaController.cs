@@ -38,9 +38,9 @@ public class EmpresaController(IEmpresaService empresaService, IMapper mapper) :
     {
         var empresa = _mapper.Map<Empresa>(empresaCreateDto);
 
-        var id = await _empresaService.Create(empresa);
+        var empresaCreated = await _empresaService.Create(empresa);
 
-        return Created($"api/empresa/Create", id);
+        return Created($"api/empresa/Create", empresaCreated);
     }
 
     [HttpPut("{id:guid}")]

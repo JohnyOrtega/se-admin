@@ -36,10 +36,11 @@ public class Repository<TEntity>(AppDbContext context) : IRepository<TEntity>
         return await _dbSet.AsNoTracking().CountAsync();
     }
 
-    public virtual async Task AddAsync(TEntity entity)
+    public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
-        await _dbSet.AddAsync(entity);
+        var entry = await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
+        return entry.Entity;
     }
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity)

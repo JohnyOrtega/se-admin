@@ -38,9 +38,9 @@ public class ContatoController(IContatoService contatoService, IMapper mapper) :
     {
         var contato = _mapper.Map<Contato>(contatoCreateDto);
 
-        var id = await _contatoService.Create(contato);
+        var contatoCreated = await _contatoService.Create(contato);
 
-        return Created($"api/contato/Create", id);
+        return Created($"api/contato/Create", contatoCreated);
     }
 
     [HttpPut("{id:guid}")]
