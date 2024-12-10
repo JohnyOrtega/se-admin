@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Dtos.EmpresaDto;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -59,7 +60,7 @@ public class EmpresaService(
         var existsEmpresa = await _empresaRepository.ExistsAsync(id);
         if (!existsEmpresa)
         {
-            throw new Exception("Empresa is not found.");
+            throw NotFoundException.For("Empresa", id);
         }
 
         await _empresaRepository.DeleteAsync(id);

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core.Dtos.User;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -76,7 +77,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper, IPasswo
         var existsUser = await _userRepository.ExistsByEmailAsync(userCreationDto.Email);
         if (existsUser)
         {
-            throw new InvalidOperationException("User already exists.");
+            throw AlreadyExistsException.For("Usuário", userCreationDto.Email);
         }
         
         var user = new User

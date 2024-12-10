@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Dtos.ContatoDto;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -21,7 +22,7 @@ public class ContatoService(
         var existsContato = await _contatoRepository.ExistsAsync(contato.Id);
         if (existsContato)
         {
-            throw new Exception("Contato already exists");
+            throw AlreadyExistsException.For("Contato", contato.Id);
         }
 
         var contatoCreated = await _contatoRepository.AddAsync(contato);
@@ -59,7 +60,7 @@ public class ContatoService(
         var existsContato = await _contatoRepository.ExistsAsync(id);
         if (!existsContato)
         {
-            throw new Exception("Contato is not found.");
+            throw NotFoundException.For("Contato", id);
         }
 
         await _contatoRepository.DeleteAsync(id);
@@ -72,12 +73,7 @@ public class ContatoService(
 
     public async Task<Contato> UpdateAsync(ContatoUpdateDto contatoUpdateDto)
     {
-        var contato = await _contatoRepository.GetByIdAsync(contatoUpdateDto.Id);
-        if (contato == null)
-        {
-            throw new Exception("Contato is not found.");
-        }
-
+        var contato = await _contatoRepository.GetByIdAsync(contatoUpdateDto.Id) ?? throw NotFoundException.For("Contato", contatoUpdateDto.Id);
         _mapper.Map(contatoUpdateDto, contato);
 
         return await _contatoRepository.UpdateAsync(contato);

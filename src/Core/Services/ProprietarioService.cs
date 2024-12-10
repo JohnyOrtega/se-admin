@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core.Dtos;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -18,7 +19,7 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         var existsProprietario = await _proprietarioRepository.ExistsAsync(proprietario.Id);
         if (existsProprietario)
         {
-            return "Proprietario is already exists";
+            throw AlreadyExistsException.For("Proprietario", proprietario.Email);
         }
 
         await _proprietarioRepository.AddAsync(proprietario);
@@ -56,7 +57,7 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         var existsProprietario = await _proprietarioRepository.ExistsAsync(id);
         if (!existsProprietario)
         {
-            throw new Exception("Proprietario is not found.");
+            throw NotFoundException.For("Proprietario", id);
         }
 
         await _proprietarioRepository.DeleteAsync(id);
@@ -64,12 +65,7 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
 
     public async Task<Proprietario> UpdateAsync(ProprietarioDto proprietarioDto)
     {
-        var proprietario = await _proprietarioRepository.GetByIdAsync(proprietarioDto.Id);
-        if (proprietario == null)
-        {
-            throw new Exception("Cemiterio is not found.");
-        }
-        
+        var proprietario = await _proprietarioRepository.GetByIdAsync(proprietarioDto.Id) ?? throw NotFoundException.For("Proprietario", proprietarioDto.Id);
         _mapper.Map(proprietarioDto, proprietario);
         
         return await _proprietarioRepository.UpdateAsync(proprietario);

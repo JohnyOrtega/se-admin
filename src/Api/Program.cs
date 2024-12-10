@@ -65,6 +65,7 @@ app.UseCors("AllowAllOrigins");
 app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

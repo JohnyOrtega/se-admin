@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core.Dtos;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -18,7 +19,7 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
         var existsMapeador = await _mapeadorRepository.ExistsAsync(mapeador.Id);
         if (existsMapeador)
         {
-            return "Mapeador is already exists";
+            throw AlreadyExistsException.For("Mapeador", mapeador.Id);
         }
 
         await _mapeadorRepository.AddAsync(mapeador);
@@ -56,7 +57,7 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
         var existsMapeador = await _mapeadorRepository.ExistsAsync(id);
         if (!existsMapeador)
         {
-            throw new Exception("Mapeador is not found.");
+            throw NotFoundException.For("Mapeador", id);
         }
 
         await _mapeadorRepository.DeleteAsync(id);
@@ -64,12 +65,7 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
 
     public async Task<Mapeador> UpdateAsync(MapeadorDto mapeadorDto)
     {
-        var mapeador = await _mapeadorRepository.GetByIdAsync(mapeadorDto.Id);
-        if (mapeador == null)
-        {
-            throw new Exception("Mapeador is not found.");
-        }
-        
+        var mapeador = await _mapeadorRepository.GetByIdAsync(mapeadorDto.Id) ?? throw NotFoundException.For("Mapeador", mapeadorDto.Id);
         mapper.Map(mapeadorDto, mapeador);
         
         var mapeadorUpdated = await _mapeadorRepository.UpdateAsync(mapeador);

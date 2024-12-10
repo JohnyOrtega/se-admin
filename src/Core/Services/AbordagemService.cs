@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Dtos.AbordagemDto;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -21,7 +22,7 @@ public class AbordagemService(
         var existsAbordagem = await _abordagemRepository.ExistsAsync(abordagem.Id);
         if (existsAbordagem)
         {
-            throw new Exception("Abordagem alreay exists.");
+            throw AlreadyExistsException.For("Abordagem", abordagem.Id);
         }
 
         var abordagemCreated = await _abordagemRepository.AddAsync(abordagem);
@@ -59,7 +60,7 @@ public class AbordagemService(
         var existsAbordagem = await _abordagemRepository.ExistsAsync(id);
         if (!existsAbordagem)
         {
-            throw new Exception("Abordagem is not found.");
+            throw NotFoundException.For("Abordagem", id);
         }
 
         await _abordagemRepository.DeleteAsync(id);
@@ -72,12 +73,7 @@ public class AbordagemService(
 
     public async Task<Abordagem> UpdateAsync(AbordagemUpdateDto abordagemUpdateDto)
     {
-        var abordagem = await _abordagemRepository.GetByIdAsync(abordagemUpdateDto.Id);
-        if (abordagem == null)
-        {
-            throw new Exception("Abordagem is not found.");
-        }
-
+        var abordagem = await _abordagemRepository.GetByIdAsync(abordagemUpdateDto.Id) ?? throw NotFoundException.For("Abordagem", abordagemUpdateDto.Id);
         _mapper.Map(abordagemUpdateDto, abordagem);
 
         return await _abordagemRepository.UpdateAsync(abordagem);

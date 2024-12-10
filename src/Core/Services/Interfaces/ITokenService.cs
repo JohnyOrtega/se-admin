@@ -1,11 +1,11 @@
 using System.Security.Claims;
 using Core.Models;
-using Core.Models.Interfaces;
-using Microsoft.IdentityModel.Tokens;
+using Core.Models.Response;
 
 namespace Core.Services.Interfaces;
 
 public interface ITokenService
 {
-    string GenerateAccessToken(User user);
+    AuthResponse GenerateAccessToken(User user);
+    ClaimsPrincipal GetPrincipal(string accessToken, string refreshToken);
 }

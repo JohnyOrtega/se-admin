@@ -9,7 +9,7 @@ public class TokenValidationMiddleware(RequestDelegate next, ITokenConfiguration
 {
     private readonly RequestDelegate _next = next;
     private readonly ITokenConfiguration _tokenConfiguration = tokenConfiguration;
-    private readonly List<string> _ignoreRoutes = ["/api/auth/login", "/api/auth/logout", "/api/auth/refresh"];
+    private readonly List<string> _ignoreRoutes = ["/api/auth/login", "/api/auth/logout", "/api/auth/refresh-token"];
     
     public async Task InvokeAsync(HttpContext context)
     {
@@ -42,7 +42,7 @@ public class TokenValidationMiddleware(RequestDelegate next, ITokenConfiguration
                 ValidateAudience = true,
                 ValidAudience = _tokenConfiguration.Audience,
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.FromSeconds(5)
             }, out _);
         }
         catch (SecurityTokenExpiredException)
@@ -57,6 +57,10 @@ public class TokenValidationMiddleware(RequestDelegate next, ITokenConfiguration
         catch (Exception ex)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                message = ex.Message
+            });
             return;
         }
 

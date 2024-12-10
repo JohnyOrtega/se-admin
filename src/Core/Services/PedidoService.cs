@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core.Dtos.Pedido;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -19,7 +20,7 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
         var existsPedido = await _pedidoRepository.ExistsAsync(pedido.Id);
         if (existsPedido)
         {
-            return "Pedido is already exists";
+            throw AlreadyExistsException.For("Pedido", pedido.Id);
         }
 
         await _pedidoRepository.AddAsync(pedido);
@@ -57,7 +58,7 @@ public class PedidoService(IPedidoRepository pedidoRepository, IMapper mapper) :
         var existsPedido = await _pedidoRepository.ExistsAsync(id);
         if (!existsPedido)
         {
-            throw new Exception("Pedido is not found.");
+            throw NotFoundException.For("Pedido", id);
         }
 
         await _pedidoRepository.DeleteAsync(id);

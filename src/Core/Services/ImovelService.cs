@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core.Dtos;
+using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
 using Core.Models.Response;
@@ -19,7 +20,7 @@ public class ImovelService(IImovelRepository imovelRepository, IMapper mapper) :
         var existsImovel = await _imovelRepository.ExistsAsync(imovel.Id);
         if (existsImovel)
         {
-            return "Imovel is already exists";
+            throw AlreadyExistsException.For("Imovel", imovel.Id);
         }
 
         await _imovelRepository.AddAsync(imovel);
@@ -57,7 +58,7 @@ public class ImovelService(IImovelRepository imovelRepository, IMapper mapper) :
         var existsImovel = await _imovelRepository.ExistsAsync(id);
         if (!existsImovel)
         {
-            throw new Exception("Imovel is not found.");
+            throw NotFoundException.For("Imovel", id);
         }
 
         await _imovelRepository.DeleteAsync(id);
@@ -70,12 +71,7 @@ public class ImovelService(IImovelRepository imovelRepository, IMapper mapper) :
 
     public async Task<Imovel> UpdateAsync(ImovelDto imovelDto)
     {
-        var imovel = await _imovelRepository.GetByIdAsync(imovelDto.Id);
-        if (imovel == null)
-        {
-            throw new Exception("Imovel is not found.");
-        }
-        
+        var imovel = await _imovelRepository.GetByIdAsync(imovelDto.Id) ?? throw NotFoundException.For("Imovel", imovelDto.Id);
         _mapper.Map(imovelDto, imovel);
         
         return await _imovelRepository.UpdateAsync(imovel);
