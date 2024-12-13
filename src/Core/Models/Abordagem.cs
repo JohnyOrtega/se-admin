@@ -9,6 +9,6 @@ public class Abordagem : Entity
     public string Comment { get; set; }
     public bool ContactAddressed { get; set; }
     public string ApproachType { get; set; }
-    public DateTime? LastApproachDate { get; set; }
-    public DateTime? NextApproachDate { get; set; }
+    public DateTime LastApproachDate { get; set; }
+    public DateTime NextApproachDate { get; set; }
 }
