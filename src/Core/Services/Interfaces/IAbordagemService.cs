@@ -12,5 +12,5 @@ public interface IAbordagemService
     Task<Abordagem> GetById(Guid id);
     Task<Abordagem> UpdateAsync(AbordagemUpdateDto abordagemUpdateDto);
     Task DeleteAsync(Guid id);
-    Task<List<Abordagem>> GetAllPendings();
+    Task<List<Abordagem>> GetAllPendings(string? email);
 }

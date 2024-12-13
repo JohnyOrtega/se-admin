@@ -79,8 +79,13 @@ public class AbordagemService(
         return await _abordagemRepository.UpdateAsync(abordagem);
     }
 
-    public async Task<List<Abordagem>> GetAllPendings()
+    public async Task<List<Abordagem>> GetAllPendings(string? email)
     {
-        return await _abordagemRepository.GetAllPendings();
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return await _abordagemRepository.GetAllPendings();
+        }
+
+        return await _abordagemRepository.GetPendingsByEmail(email);
     }
 }

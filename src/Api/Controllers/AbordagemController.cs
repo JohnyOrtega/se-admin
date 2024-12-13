@@ -24,10 +24,10 @@ public class AbordagemController(IAbordagemService abordagemService, IMapper map
         return Ok(abordagem);
     }
 
-    [HttpGet("pendings")]
-    public async Task<ActionResult> GetAllPendings()
+    [HttpGet("pendings/{email?}")]
+    public async Task<ActionResult> GetAllPendings(string? email)
     {
-        var abordagens = await _abordagemService.GetAllPendings();
+        var abordagens = await _abordagemService.GetAllPendings(email);
         return Ok(abordagens);
     }
 

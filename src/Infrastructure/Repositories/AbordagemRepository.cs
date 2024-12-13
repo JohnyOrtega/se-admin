@@ -32,4 +32,17 @@ public class AbordagemRepository(AppDbContext context) : Repository<Abordagem>(c
 
         return await query.ToListAsync();
     }
+
+    public async Task<List<Abordagem>> GetPendingsByEmail(string email)
+    {
+        var query = _abordagens.AsQueryable()
+            .Include(a => a.Contato)
+            .Where(a => 
+                (a.UpdatedBy == email) || 
+                (string.IsNullOrEmpty(a.UpdatedBy) && a.CreatedBy == email))
+            .Where(a => a.NextApproachDate >= DateTime.Now.AddDays(-1))
+            .OrderBy(a => a.NextApproachDate);
+
+        return await query.ToListAsync();
+    }
 }
