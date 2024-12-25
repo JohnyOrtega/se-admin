@@ -1,6 +1,6 @@
-namespace Core.Dtos;
+namespace Core.Dtos.ProprietarioDto;
 
-public class ProprietarioDto
+public class ProprietarioCreateDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

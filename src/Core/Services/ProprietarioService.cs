@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.Dtos;
+using Core.Dtos.ProprietarioDto;
 using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
@@ -27,7 +27,7 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         return proprietario.Id.ToString();
     }
 
-    public async Task<PagedResponse<Proprietario>> GetWithFilters(ProprietarioFilterParams filters)
+    public async Task<PagedResponse<ProprietarioDto>> GetWithFilters(ProprietarioFilterParams filters)
     {
         var pageNumber = filters.PageNumber;
         var pageSize = filters.PageSize;
@@ -36,15 +36,27 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         
         var totalItems = await query.CountAsync();
         var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-        
+
         var items = await query
+            .Select(p => new
+            {
+                Proprietario = p,
+                ImoveisCount = p.Imoveis.Count()
+            })
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        
-        return new PagedResponse<Proprietario>()
+
+        var proprietariosDto = items.Select(item =>
         {
-            Items = items,
+            var dto = _mapper.Map<ProprietarioDto>(item.Proprietario);
+            dto.ImoveisCount = item.ImoveisCount;
+            return dto;
+        }).ToList();
+
+        return new PagedResponse<ProprietarioDto>()
+        {
+            Items = proprietariosDto,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalPages = totalPages,
@@ -63,16 +75,20 @@ public class ProprietarioService(IProprietarioRepository proprietarioRepository,
         await _proprietarioRepository.DeleteAsync(id);
     }
 
-    public async Task<Proprietario> UpdateAsync(ProprietarioDto proprietarioDto)
+    public async Task<ProprietarioDto> UpdateAsync(ProprietarioUpdateDto proprietarioUpdateDto)
     {
-        var proprietario = await _proprietarioRepository.GetByIdAsync(proprietarioDto.Id) ?? throw NotFoundException.For("Proprietario", proprietarioDto.Id);
-        _mapper.Map(proprietarioDto, proprietario);
-        
-        return await _proprietarioRepository.UpdateAsync(proprietario);
+        var proprietario = await _proprietarioRepository.GetByIdAsync(proprietarioUpdateDto.Id) ?? throw NotFoundException.For("Proprietario", proprietarioUpdateDto.Id);
+        _mapper.Map(proprietarioUpdateDto, proprietario);
+
+        var proprietarioUpdated = await _proprietarioRepository.UpdateAsync(proprietario);
+
+        return _mapper.Map<ProprietarioDto>(proprietarioUpdated);
     }
 
-    public async Task<Proprietario> GetById(Guid id)
+    public async Task<ProprietarioDto> GetById(Guid id)
     {
-        return await _proprietarioRepository.GetByIdAsync(id);
+        var proprietario = await _proprietarioRepository.GetByIdAsync(id);
+
+        return _mapper.Map<ProprietarioDto>(proprietario);
     }
 }
