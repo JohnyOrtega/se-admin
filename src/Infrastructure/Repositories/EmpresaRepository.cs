@@ -22,9 +22,6 @@ public class EmpresaRepository(AppDbContext context) : Repository<Empresa>(conte
         if (!string.IsNullOrEmpty(filters.Telephone))
             query = query.Where(m => m.Telephone.Contains(filters.Telephone));
 
-        if (!string.IsNullOrEmpty(filters.Sector))
-            query = query.Where(m => m.Sector.Contains(filters.Sector));
-
         if (!string.IsNullOrEmpty(filters.SocialReason))
             query = query.Where(m => m.SocialReason.Contains(filters.SocialReason));
 
