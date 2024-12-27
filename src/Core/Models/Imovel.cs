@@ -12,7 +12,8 @@ public class Imovel : Entity
     public string Availability { get; set; }
     public decimal RentValue { get; set; }
     public decimal SaleValue { get; set; }
-    public decimal IptuValue { get; set; }
+    public decimal IptuAnnual { get; set; }
+    public decimal IptuMonthly { get; set; }
     public decimal SearchMeterage { get; set; }
     public decimal TotalArea { get; set; }
     public string RealEstate { get; set; }

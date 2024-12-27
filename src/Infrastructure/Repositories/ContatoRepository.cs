@@ -25,6 +25,15 @@ public class ContatoRepository(AppDbContext context) : Repository<Contato>(conte
         if (!string.IsNullOrEmpty(filters.Position))
             query = query.Where(m => m.Position.Contains(filters.Position));
 
+        if (!string.IsNullOrEmpty(filters.City))
+            query = query.Where(m => m.City.Contains(filters.City));
+
+        if (!string.IsNullOrEmpty(filters.State))
+            query = query.Where(m => m.State.Contains(filters.State));
+
+        if (!string.IsNullOrEmpty(filters.AreaOfActivity))
+            query = query.Where(m => m.AreaOfActivity.Contains(filters.AreaOfActivity));
+
         if (filters.CreatedAt.HasValue)
             query = query.Where(m => m.CreatedAt.Date == filters.CreatedAt.Value.Date);
 

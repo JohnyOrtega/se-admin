@@ -13,8 +13,10 @@ public class ImovelFilterParams : PaginationParams
     public decimal? MaxRentValue { get; set; }
     public decimal? MinSaleValue { get; set; }
     public decimal? MaxSaleValue { get; set; }
-    public decimal? MinIptuValue { get; set; }
-    public decimal? MaxIptuValue { get; set; }
+    public decimal? MinIptuAnnual { get; set; }
+    public decimal? MaxIptuAnnual { get; set; }
+    public decimal? MinIptuMonthly { get; set; }
+    public decimal? MaxIptuMonthly { get; set; }
     public decimal? MinSearchMeterage { get; set; }
     public decimal? MaxSearchMeterage { get; set; }
     public decimal? MinTotalArea { get; set; }

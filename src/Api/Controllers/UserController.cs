@@ -14,7 +14,7 @@ public class UserController(IUserService userService) : ControllerBase
     private readonly IUserService _userService = userService;
     
     [HttpGet]
-    [AuthorizeRole("Admin")]
+    [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> GetAllWithPagination(
         [FromQuery] UserFilterParams filters)
     {
@@ -22,7 +22,7 @@ public class UserController(IUserService userService) : ControllerBase
         
         return Ok(users);
     }
-    
+
     [HttpGet("{id:guid}")]
     [AuthorizeRole("Admin")]
     public async Task<ActionResult> GetById(Guid id)

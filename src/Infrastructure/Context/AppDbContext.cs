@@ -34,7 +34,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
             .HasColumnType("decimal(10,2)");
 
         modelBuilder.Entity<Imovel>()
-            .Property(c => c.IptuValue)
+            .Property(c => c.IptuAnnual)
+            .HasColumnType("decimal(10,2)");
+
+        modelBuilder.Entity<Imovel>()
+            .Property(c => c.IptuMonthly)
             .HasColumnType("decimal(10,2)");
 
         modelBuilder.Entity<Imovel>()

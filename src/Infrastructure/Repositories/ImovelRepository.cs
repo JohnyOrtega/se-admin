@@ -46,11 +46,17 @@ public class ImovelRepository(AppDbContext context) : Repository<Imovel>(context
         if (filters.MaxSaleValue.HasValue)
             query = query.Where(c => c.SaleValue <= filters.MaxSaleValue.Value);
 
-        if (filters.MinIptuValue.HasValue)
-            query = query.Where(c => c.IptuValue >= filters.MinIptuValue.Value);
+        if (filters.MinIptuAnnual.HasValue)
+            query = query.Where(c => c.IptuAnnual >= filters.MinIptuAnnual.Value);
+        
+        if (filters.MaxIptuAnnual.HasValue)
+            query = query.Where(c => c.IptuAnnual <= filters.MaxIptuAnnual.Value);
 
-        if (filters.MaxIptuValue.HasValue)
-            query = query.Where(c => c.IptuValue <= filters.MaxIptuValue.Value);
+        if (filters.MinIptuMonthly.HasValue)
+            query = query.Where(c => c.IptuMonthly >= filters.MinIptuMonthly.Value);
+
+        if (filters.MaxIptuMonthly.HasValue)
+            query = query.Where(c => c.IptuMonthly <= filters.MaxIptuMonthly.Value);
 
         if (filters.MinSearchMeterage.HasValue)
             query = query.Where(c => c.SearchMeterage >= filters.MinSearchMeterage.Value);
