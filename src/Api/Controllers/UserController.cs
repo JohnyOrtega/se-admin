@@ -45,7 +45,7 @@ public class UserController(IUserService userService) : ControllerBase
     }
     
     [HttpPost("register")]
-    [AuthorizeRole("Admin")]
+    //[AuthorizeRole("Admin")]
     public async Task<ActionResult> Register(
         [FromBody] UserCreationDto request)
     {
