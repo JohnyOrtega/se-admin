@@ -25,8 +25,8 @@ public class ProprietarioRepository(AppDbContext context) : Repository<Proprieta
         if (!string.IsNullOrEmpty(filters.Address))
             query = query.Where(m => m.Address.Contains(filters.Address));
 
-        if (!string.IsNullOrEmpty(filters.Neighboor))
-            query = query.Where(m => m.Neighboor.Contains(filters.Neighboor));
+        if (!string.IsNullOrEmpty(filters.Neighborhood))
+            query = query.Where(m => m.Neighborhood.Contains(filters.Neighborhood));
 
         if (!string.IsNullOrEmpty(filters.City))
             query = query.Where(m => m.City.Contains(filters.City));

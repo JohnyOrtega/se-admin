@@ -6,7 +6,7 @@ public class ProprietarioFilterParams : PaginationParams
     public string? Source { get; set; }
     public string? Telephone { get; set; }
     public string? Address { get; set; }
-    public string? Neighboor { get; set; }
+    public string? Neighborhood { get; set; }
     public string? City { get; set; }
     public string? State { get; set; }
     public string? Email { get; set; }

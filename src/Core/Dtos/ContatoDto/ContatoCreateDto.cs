@@ -3,13 +3,13 @@ namespace Core.Dtos.ContatoDto;
 public class ContatoCreateDto
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Position { get; set; }
-    public string Telephone { get; set; }
-    public string Email { get; set; }
-    public string City { get; set; }
-    public string State { get; set; }
-    public string AreaOfActivity { get; set; }
-    public string Observations { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Position { get; set; } = string.Empty;
+    public string Telephone { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public string State { get; set; } = string.Empty;
+    public string AreaOfActivity { get; set; } = string.Empty;
+    public string Observations { get; set; } = string.Empty;
     public Guid EmpresaId { get; set; }
 }
