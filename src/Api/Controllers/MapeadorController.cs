@@ -1,6 +1,6 @@
 using Api.Attributes;
 using AutoMapper;
-using Core.Dtos;
+using Core.Dtos.MapeadorDto;
 using Core.Models;
 using Core.Models.Request;
 using Core.Services.Interfaces;
@@ -33,25 +33,25 @@ public class MapeadorController(IMapeadorService mapeadorService, IMapper mapper
 
     [HttpPost]
     [AuthorizeRole("Admin", "Moderador")]
-    public async Task<ActionResult> Create([FromBody] MapeadorDto mapeadorDto)
+    public async Task<ActionResult> Create([FromBody] MapeadorCreateDto mapeadorCreateDto)
     {
-        var motoboy = mapper.Map<Mapeador>(mapeadorDto);
+        var mapeador = mapper.Map<Mapeador>(mapeadorCreateDto);
 
-        var id = await _mapeadorService.Create(motoboy);
+        var id = await _mapeadorService.Create(mapeador);
 
-        return Created($"api/motoboy/Create", id);
+        return Created($"api/mapeador/Create", id);
     }
 
     [HttpPut("{id:guid}")]
     [AuthorizeRole("Admin", "Moderador")]
-    public async Task<ActionResult> Update([FromBody] MapeadorDto mapeadorDto, Guid id)
+    public async Task<ActionResult> Update([FromBody] MapeadorUpdateDto mapeadorUpdateDto, Guid id)
     {
-        if (mapeadorDto.Id != id)
+        if (mapeadorUpdateDto.Id != id)
         {
             return BadRequest("Ids do not match.");
         }
 
-        var mapeadorUpdated = await _mapeadorService.UpdateAsync(mapeadorDto);
+        var mapeadorUpdated = await _mapeadorService.UpdateAsync(mapeadorUpdateDto);
         return Ok(mapeadorUpdated);
     }
 

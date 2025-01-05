@@ -1,4 +1,6 @@
-namespace Core.Dtos;
+using Core.Models;
+
+namespace Core.Dtos.MapeadorDto;
 
 public class MapeadorDto
 {
@@ -13,4 +15,6 @@ public class MapeadorDto
     public string CameraType { get; set; }
     public string CelphoneModel { get; set; }
     public string Observations { get; set; }
+    public ICollection<HistoricoMapeamento> HistoricoMapeamentos { get; set; }
+
 }

@@ -36,4 +36,11 @@ public class MapeadorRepository(AppDbContext context) : Repository<Mapeador>(con
         
         return query;
     }
+
+    public override async Task<Mapeador> GetByIdAsync(Guid id)
+    {
+        return await _mapeadores
+            .Include(m => m.HistoricoMapeamentos)
+            .FirstOrDefaultAsync(c => c.Id == id) ?? throw new InvalidOperationException();
+    }
 }

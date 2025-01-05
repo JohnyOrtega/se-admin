@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
     public DbSet<Empresa> Empresas => Set<Empresa>();
     public DbSet<Contato> Contatos => Set<Contato>();
     public DbSet<Abordagem> Abordagens => Set<Abordagem>();
+    public DbSet<HistoricoMapeamento> HistoricoMapeamentos => Set<HistoricoMapeamento>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Proprietario>()
@@ -41,12 +42,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
             .Property(c => c.IptuMonthly)
             .HasColumnType("decimal(10,2)");
 
-        modelBuilder.Entity<Imovel>()
-            .Property(c => c.SearchMeterage)
-            .HasColumnType("decimal(10,2)");
-
-        modelBuilder.Entity<Imovel>()
-            .Property(c => c.TotalArea)
+        modelBuilder.Entity<HistoricoMapeamento>()
+            .Property(c => c.Value)
             .HasColumnType("decimal(10,2)");
 
         modelBuilder.Entity<PedidoImovel>(entity =>
@@ -73,6 +70,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, AuditableInter
             .HasOne(a => a.Contato)
             .WithMany(c => c.Abordagens)
             .HasForeignKey(a => a.ContatoId);
+
+        modelBuilder.Entity<Mapeador>()
+            .HasMany(m => m.HistoricoMapeamentos)
+            .WithOne(h => h.Mapeador)
+            .HasForeignKey(h => h.MapeadorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.Dtos;
+using Core.Dtos.MapeadorDto;
 using Core.Exceptions;
 using Core.Models;
 using Core.Models.Request;
@@ -63,7 +63,7 @@ public class MapeadorService(IMapeadorRepository mapeadorRepository, IMapper map
         await _mapeadorRepository.DeleteAsync(id);
     }
 
-    public async Task<Mapeador> UpdateAsync(MapeadorDto mapeadorDto)
+    public async Task<Mapeador> UpdateAsync(MapeadorUpdateDto mapeadorDto)
     {
         var mapeador = await _mapeadorRepository.GetByIdAsync(mapeadorDto.Id) ?? throw NotFoundException.For("Mapeador", mapeadorDto.Id);
         mapper.Map(mapeadorDto, mapeador);

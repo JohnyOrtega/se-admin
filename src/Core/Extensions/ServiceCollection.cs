@@ -20,7 +20,8 @@ public static class ServiceCollection
             .AddScoped<IUserService, UserService>()
             .AddScoped<IEmpresaService, EmpresaService>()
             .AddScoped<IContatoService, ContatoService>()
-            .AddScoped<IAbordagemService, AbordagemService>();
+            .AddScoped<IAbordagemService, AbordagemService>()
+            .AddScoped<IHistoricoMapeamentoService, HistoricoMapeamentoService>();
 
         services
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

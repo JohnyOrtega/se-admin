@@ -1,6 +1,6 @@
-namespace Core.Models;
+﻿namespace Core.Dtos.MapeadorDto;
 
-public class Mapeador : Entity
+public class MapeadorCreateDto
 {
     public string Name { get; set; }
     public string Telephone { get; set; }
@@ -12,5 +12,4 @@ public class Mapeador : Entity
     public string CameraType { get; set; }
     public string CelphoneModel { get; set; }
     public string Observations { get; set; }
-    public virtual ICollection<HistoricoMapeamento> HistoricoMapeamentos { get; set; } = [];
 }

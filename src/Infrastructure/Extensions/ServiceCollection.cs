@@ -44,7 +44,8 @@ public static class ServiceCollection
             .AddScoped<IPedidoRepository, PedidoRepository>()
             .AddScoped<IEmpresaRepository, EmpresaRepository>()
             .AddScoped<IContatoRepository, ContatoRepository>()
-            .AddScoped<IAbordagemRepository, AbordagemRepository>();
+            .AddScoped<IAbordagemRepository, AbordagemRepository>()
+            .AddScoped<IHistoricoMapeamentoRepository, HistoricoMapeamentoRepository>();
         
         return services;
     }
