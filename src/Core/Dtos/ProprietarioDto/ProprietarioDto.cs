@@ -17,4 +17,7 @@ public class ProprietarioDto
     public string Observations { get; set; } = string.Empty;
     public ICollection<Imovel> Imoveis { get; set; } = [];
     public int ImoveisCount { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public string? CreatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
 }
