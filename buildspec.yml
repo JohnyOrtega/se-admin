@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 8.0
+  pre_build:
+    commands:
+      - echo Restore started on `date`
+      - dotnet restore
+  build:
+    commands:
+      - echo Build started on `date`
+      - dotnet build -c Release
+      - dotnet test
+      - dotnet publish -c Release -o ./publish
+artifacts:
+  files:
+    - "**/*"
+  base-directory: "publish"
