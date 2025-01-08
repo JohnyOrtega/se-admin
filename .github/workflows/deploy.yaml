@@ -53,7 +53,7 @@ jobs:
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.REPOSITORY }}
 
       - name: 📦 Build and Tag Docker Image
-        run: docker build -t ${{ secrets.REPOSITORY }}:latest -f ./src/Api/Dockerfile .
+        run: docker build -t ${{ secrets.REPOSITORY }}:latest -f ./Dockerfile .
 
       - name: 🚀 Push Docker Image to Amazon ECR
         run: docker push ${{ secrets.REPOSITORY }}:latest
