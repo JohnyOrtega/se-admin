@@ -1,0 +1,80 @@
+name: Build and Push to ECR
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: us-east-1                   
+  ECR_REPOSITORY: se/se-admin-api        
+  IMAGE_TAG: ${{ github.sha }}
+  DOTNET_VERSION: '8.0.x'
+  ECR_REGISTRY: ${{ secrets.REPOSITORY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 📦 Restore Dependencies
+        run: |
+          dotnet restore ./src/Api/Api.csproj
+          dotnet restore ./src/Core/Core.csproj
+          dotnet restore ./src/Infrastructure/Infrastructure.csproj
+
+      - name: 🏗️ Build Project
+        run: dotnet build ./src/Api/Api.csproj --no-restore -c Release
+
+      - name: ✅ Run Tests
+        run: dotnet test --no-build --verbosity normal
+
+      - name: 🛡️ Publish Artifacts
+        run: dotnet publish ./src/Api/Api.csproj -c Release -o ./publish
+
+      - name: 📤 Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-build
+          path: ./publish
+
+  publish:
+    needs: build
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📥 Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-build
+          path: ./publish
+
+      - name: 🔐 Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 🔑 Login to Amazon ECR
+        run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+
+      - name: 📦 Build and Tag Docker Image
+        run: docker build -t ${{ env.ECR_REGISTRY }}:${{ env.IMAGE_TAG }} -t ${{ env.ECR_REGISTRY }}:latest -f ./Dockerfile .
+
+      - name: 🚀 Push Docker Image to Amazon ECR
+        run: |
+          docker push ${{ env.ECR_REGISTRY }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ECR_REGISTRY }}:latest
