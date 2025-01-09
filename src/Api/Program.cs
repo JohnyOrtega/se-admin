@@ -48,7 +48,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowAllOrigins", configurePolicy: policy =>
     {
         policy
-            .WithOrigins("https://localhost:5173", "https://localhost:5174", "https://superexpansao-admin.vercel.app")
+            .WithOrigins(
+                "https://localhost:5173", 
+                "https://localhost:5174", 
+                "https://superexpansao-admin.vercel.app", 
+                "https://admin.superexpansao.com.br")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
