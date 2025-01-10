@@ -72,6 +72,11 @@ jobs:
           
       - name: 🚀 Deploy to EC2
         run: |
+          # Configurar diretório remoto
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} '
+              mkdir -p ~/app/
+          '
+
           # Copy deployment package
           scp -i ~/.ssh/key.pem -o StrictHostKeyChecking=no deploy.zip ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }}:~/app/
           
