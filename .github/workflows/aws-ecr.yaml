@@ -10,7 +10,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: se-admin-api
-  EC2_HOST: ec2-3-88-249-56.compute-1.amazonaws.com
+  EC2_HOST: 44.212.16.189
   
 jobs:
   build-and-deploy:
