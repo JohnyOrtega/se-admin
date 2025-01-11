@@ -1,148 +1,52 @@
-name: Build and Deploy to EC2
+name: CI/CD to Amazon EC2
+
 on:
-  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 env:
-  DOTNET_VERSION: '8.0.x'
-  EC2_HOST: ${{ secrets.EC2_HOST }}
-  EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
-  DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: 418272788393.dkr.ecr.us-east-1.amazonaws.com/se-admin-api
+  EC2_HOST: ec2-3-88-249-56.compute-1.amazonaws.com
   
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: 🛠️ Checkout Repository
-        uses: actions/checkout@v4
-        
-      - name: ⚙️ Setup .NET 8 SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-          
-      - name: 📦 Restore Dependencies
-        run: |
-          dotnet restore ./src/Api/Api.csproj
-          dotnet restore ./src/Core/Core.csproj
-          dotnet restore ./src/Infrastructure/Infrastructure.csproj
-          
-      - name: 🏗️ Build Project
-        run: dotnet build ./src/Api/Api.csproj --no-restore -c Release
-        
-      - name: ✅ Run Tests
-        run: dotnet test --no-build --verbosity normal
-        
-      - name: 🛡️ Publish Artifacts
-        run: dotnet publish ./src/Api/Api.csproj -c Release -o ./publish
-        
-      - name: 📤 Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-build
-          path: ./publish
-
-  deploy:
-    needs: build
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🛠️ Checkout Repository
-        uses: actions/checkout@v4
-        
-      - name: 📥 Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: app-build
-          path: ./publish
-          
-      - name: 📦 Create deployment package
-        run: |
-          cd publish
-          zip -r ../deploy.zip .
-          
-      - name: 🔑 Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
-          chmod 600 ~/.ssh/key.pem
-          
-      - name: 🚀 Deploy to EC2
-        run: |
-          # Configurar diretório remoto
-          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} '
-              mkdir -p ~/app/
-          '
-
-          # Copy deployment package
-          scp -i ~/.ssh/key.pem -o StrictHostKeyChecking=no deploy.zip ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }}:~/app/
-          
-          # Create environment variables file
-          echo "Creating environment variables file..."
-          cat << EOF > env_vars.conf
-          Environment=ASPNETCORE_ENVIRONMENT=Production
-          Environment=Jwt__SecretKey="${{ secrets.SECRET_KEY }}"
-          Environment=Jwt__Audience=SuperExpansao.Client
-          Environment=Jwt__Issuer=SuperExpansao.API
-          Environment=DATABASE_URL"${{ secrets.DATABASE_URL }}"
-          Environment=DATABASE_CONNECTION="${{ secrets.DATABASE_CONNECTION }}"
-          Environment=JWT_SECRET="${{ secrets.JWT_SECRET }}"
-          Environment=AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
-          Environment=AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-          Environment=AWS_REGION="${{ secrets.AWS_REGION }}"
-          Environment=SMTP_HOST="${{ secrets.SMTP_HOST }}"
-          Environment=SMTP_PORT="${{ secrets.SMTP_PORT }}"
-          Environment=SMTP_USERNAME="${{ secrets.SMTP_USERNAME }}"
-          Environment=SMTP_PASSWORD="${{ secrets.SMTP_PASSWORD }}"
-          # Adicione outras variáveis de ambiente conforme necessário
-          EOF
-          
-          # Copy environment variables file
-          scp -i ~/.ssh/key.pem -o StrictHostKeyChecking=no env_vars.conf ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }}:~/app/
-          
-          # Execute deployment commands
-          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} '
-            # Stop existing service if running
-            sudo systemctl stop myapp || true
-            
-            # Clean and prepare directory
-            cd ~/app
-            rm -rf publish
-            unzip -o deploy.zip -d publish
-            
-            # Update service configuration with environment variables
-            sudo tee /etc/systemd/system/myapp.service << EOF
-            [Unit]
-            Description=.NET Web API Application
-            
-            [Service]
-            WorkingDirectory=/home/${{ env.EC2_USERNAME }}/app/publish
-            ExecStart=/usr/bin/dotnet /home/${{ env.EC2_USERNAME }}/app/publish/Api.dll
-            Restart=always
-            RestartSec=10
-            SyslogIdentifier=myapp
-            User=${{ env.EC2_USERNAME }}
-            # Include environment variables from file
-            EnvironmentFile=/home/${{ env.EC2_USERNAME }}/app/env_vars.conf
-            
-            [Install]
-            WantedBy=multi-user.target
-            EOF
-            
-            # Reload and restart service
-            sudo systemctl daemon-reload
-            sudo systemctl enable myapp
-            sudo systemctl start myapp
-            
-            # Install/Update SSL certificate
-            if [ ! -f /etc/letsencrypt/live/${{ env.DOMAIN_NAME }}/fullchain.pem ]; then
-              sudo apt-get update
-              sudo apt-get install -y certbot python3-certbot-nginx
-              sudo certbot --nginx -d ${{ env.DOMAIN_NAME }} --non-interactive --agree-tos -m ${{ secrets.CERT_EMAIL }}
-            else
-              sudo certbot renew
-            fi
-          '
+    - uses: actions/checkout@v3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          docker stop app_container || true
+          docker rm app_container || true
+          docker run -d --name app_container -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
