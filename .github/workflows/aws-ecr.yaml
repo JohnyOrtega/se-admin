@@ -50,4 +50,12 @@ jobs:
           docker pull ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           docker stop app_container || true
           docker rm app_container || true
-          docker run -d --name app_container -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          docker run -d \
+            --name app_container \
+            -p 8080:8080 \
+            -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            -e Jwt__SecretKey="${{ secrets.SECRET_KEY }}" \
+            -e ASPNETCORE_ENVIRONMENT="Production" \
+            -e Jwt__Audience="SuperExpansao.Client" \
+            -e Jwt__Issuer="SuperExpansao.API" \
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
