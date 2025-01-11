@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: 418272788393.dkr.ecr.us-east-1.amazonaws.com/se-admin-api
+  ECR_REPOSITORY: se-admin-api
   EC2_HOST: ec2-3-88-249-56.compute-1.amazonaws.com
   
 jobs:
