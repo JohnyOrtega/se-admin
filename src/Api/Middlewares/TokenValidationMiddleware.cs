@@ -9,7 +9,7 @@ public class TokenValidationMiddleware(RequestDelegate next, ITokenConfiguration
 {
     private readonly RequestDelegate _next = next;
     private readonly ITokenConfiguration _tokenConfiguration = tokenConfiguration;
-    private readonly List<string> _ignoreRoutes = ["/api/auth/login", "/api/auth/logout", "/api/auth/refresh-token", "/health"];
+    private readonly List<string> _ignoreRoutes = ["/api/auth/login", "/api/auth/logout", "/api/auth/refresh-token", "/health", "/swagger"];
     
     public async Task InvokeAsync(HttpContext context)
     {
