@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
                 "https://localhost:5174", 
                 "https://superexpansao-admin.vercel.app", 
                 "https://admin.superexpansao.com.br",
-                "https://main.d2u07rn7pkfnfy.amplifyapp.com/")
+                "https://main.d2u07rn7pkfnfy.amplifyapp.com")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
