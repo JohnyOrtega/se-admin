@@ -1,7 +1,6 @@
 using Api.Attributes;
 using Core.Dtos.User;
 using Core.Models.Request;
-using Core.Models.Response;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,14 +11,14 @@ namespace Api.Controllers;
 public class UserController(IUserService userService) : ControllerBase
 {
     private readonly IUserService _userService = userService;
-    
+
     [HttpGet]
     [AuthorizeRole("Admin", "Moderador")]
     public async Task<ActionResult> GetAllWithPagination(
         [FromQuery] UserFilterParams filters)
     {
         var users = await _userService.GetWithFilters(filters);
-        
+
         return Ok(users);
     }
 
@@ -30,7 +29,7 @@ public class UserController(IUserService userService) : ControllerBase
         var user = await _userService.GetById(id);
         return Ok(user);
     }
-    
+
     [HttpPut("{id:guid}")]
     [AuthorizeRole("Admin")]
     public async Task<ActionResult> Update([FromBody] UserDto userDto, Guid id)
@@ -39,13 +38,13 @@ public class UserController(IUserService userService) : ControllerBase
         {
             return BadRequest("Ids do not match.");
         }
-        
+
         var proprietarioUpdated = await _userService.UpdateAsync(userDto);
         return Ok(proprietarioUpdated);
     }
-    
+
     [HttpPost("register")]
-    //[AuthorizeRole("Admin")]
+    [AuthorizeRole("Admin")]
     public async Task<ActionResult> Register(
         [FromBody] UserCreationDto request)
     {
