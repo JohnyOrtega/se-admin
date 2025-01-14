@@ -25,8 +25,6 @@ public static class ServiceCollection
         var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
                                configuration.GetConnectionString("DefaultConnection");
         
-        Console.WriteLine(connectionString);
-        
         services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
         );
