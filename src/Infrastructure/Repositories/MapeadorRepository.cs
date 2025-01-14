@@ -32,7 +32,7 @@ public class MapeadorRepository(AppDbContext context) : Repository<Mapeador>(con
             query = query.Where(m => m.CelphoneModel.Contains(filters.CelphoneModel));
         
         if (filters.LastMapping.HasValue)
-            query = query.Where(m => m.LastMapping.Date == filters.LastMapping.Value.Date);
+            query = query.Where(m => m.LastMapping.Value.Date == filters.LastMapping.Value.Date);
         
         return query;
     }
